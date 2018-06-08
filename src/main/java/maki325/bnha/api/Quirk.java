@@ -48,21 +48,31 @@ public abstract class Quirk {
 		int lvl = 1;
 		if(xp < i) return 1;
 		
-		while(i < xp) {
+		while(i <= xp) {
 			lvl++;
 			i *= levelFactor;
 		}
+
+		if(xp < i) {
+			if(lvl - 1 == 0) {
+				
+				return 1;
+			}
+			return lvl - 1;
+		}
 		
-		if(i == xp) return level;
-		
-		return level-1;
+		return lvl;
 	}
 	
 	public void setXp(double xp) {
 		this.xp = xp;
 		this.level = xpToLevel(xp);
 		init();
-		nextXp = xp * levelFactor;
+		if(xp == 0) {
+			nextXp = levelMinimum;
+		} else {
+			nextXp = xp * levelFactor;
+		}
 	}
 	
 	protected static void init() {
@@ -98,6 +108,10 @@ public abstract class Quirk {
 	
 	public static double getXp() {
 		return xp;
+	}
+	
+	public static void addXp(double add) {
+		xp += add;
 	}
 	
 }

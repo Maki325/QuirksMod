@@ -1,5 +1,6 @@
 package maki325.bnha;
 
+import java.util.Iterator;
 import java.util.Random;
 
 import maki325.bnha.api.Quirk;
@@ -56,7 +57,7 @@ public class BnHA {
 		if(!event.player.getTags().contains(tag)) {
 			event.player.addTag(tag);
 			int i = new Random().nextInt(ModQuirks.QUIRKS.size()+1);
-			/*if(i < ModQuirks.QUIRKS.size()) {
+			if(i < ModQuirks.QUIRKS.size()) {
 				Quirk q = ModQuirks.QUIRKS.get(i);
 				event.player.addTag("quirk_" + q.getName());
 				event.player.addTag("qxp_0");
@@ -64,12 +65,11 @@ public class BnHA {
 				event.player.sendMessage(new TextComponentString("You got a quirk.It's " + q.getName()));
 			} else {
 				event.player.addTag("quirk_none");
+				event.player.addTag("qxp_0");
 				quirks = "none";
 				event.player.sendMessage(new TextComponentString("Bad luck. You got no quirks. Maybe you can find some in the wild"));
-			}*/
-			event.player.addTag("quirk_fly");
-			event.player.addTag("qxp_0");
-			quirks = "fly";
+			}
+			xp = 0;
 		} else {
 			for(String s:event.player.getTags()) {
 				if(s.startsWith("quirk_")) {
@@ -81,8 +81,8 @@ public class BnHA {
 			} else {
 				for(String s:event.player.getTags()) {
 					if(s.startsWith("qxp_")) {
-						xp = Integer.parseInt(s.split("_")[1]);
-						ModQuirks.getQuirkByName(quirks).setXp(xp);
+						xp = Double.parseDouble(s.split("_")[1]);
+						ModQuirks.getQuirkByName(quirks.replaceAll(" ", "")).setXp(xp);
 					}
 				}
 				if(xp == -1) {
@@ -95,8 +95,14 @@ public class BnHA {
 
 	@SubscribeEvent
 	public void leave(PlayerLoggedOutEvent event) {
+		for(Iterator<String> it = event.player.getTags().iterator(); it.hasNext();){
+		    String s = it.next();
+			if(s.startsWith("qxp_")) {
+				it.remove();
+			}
+		}
 		event.player.addTag("qxp_" + ModQuirks.getQuirkByName(quirks).getXp());
-
+		xp = -1;
 		quirks = "";
 	}
 	

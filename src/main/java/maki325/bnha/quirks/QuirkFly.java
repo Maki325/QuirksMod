@@ -67,10 +67,10 @@ public class QuirkFly extends Quirk {
 		}
 		if(activated) {
 			act++;
-			xp += xpPerTick;
+			addXp(xpPerTick);
 			if(xp >= nextXp) {
 				level++;
-				nextXp = xp*levelFactor;
+				nextXp = xp * levelFactor;
 				p.sendMessage(new TextComponentString(TextFormatting.AQUA + "Level Up"));
 				p.sendMessage(new TextComponentString(TextFormatting.AQUA + "Your now level " + level));
 				maxCooldown *= levelUp.getCooldownMultiplier();

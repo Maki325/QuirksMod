@@ -4,7 +4,7 @@ public class LevelUp {
 	
 	private double cooldownMultiplier, activatedMultiplier;
 	
-	public LevelUp(double cooldownMultiplier, double activatedMultiplier) {
+	public LevelUp(double activatedMultiplier, double cooldownMultiplier) {
 		this.cooldownMultiplier = cooldownMultiplier;
 		this.activatedMultiplier = activatedMultiplier;
 	}

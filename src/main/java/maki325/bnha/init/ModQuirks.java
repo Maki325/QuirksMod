@@ -30,7 +30,7 @@ public class ModQuirks {
 	
 	public static Quirk getQuirkByName(String name) {
 		for(Quirk q:QUIRKS) {
-			if(q.getName() == name) {
+			if(q.getName() == name || name == q.getName() || (q.getName().indexOf(name) == 0 && name.indexOf(q.getName()) == 0)) {
 				return q;
 			}
 		}
