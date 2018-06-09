@@ -19,11 +19,11 @@ public class QuirkFly extends Quirk {
 		super("fly");
 
 		setMaxCooldown(200);
-		setMaxActivatedTime(200);
+		setMaxActivatedTime(50);
 		setLevelFactor(1.5);
 		setLevelMinimum(10);
 		setLevelUp(new LevelUp(1.1d, 0.9d));
-		setXpPerTick(1.5d);
+		setXpPerTick(1.5/20);
 	}
 
 	@Override

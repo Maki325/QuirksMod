@@ -56,13 +56,15 @@ public class BnHA {
 		String tag = "done_" + event.player.world.getSaveHandler().getWorldDirectory().getName();
 		if(!event.player.getTags().contains(tag)) {
 			event.player.addTag(tag);
-			int i = new Random().nextInt(ModQuirks.QUIRKS.size()+1);
-			if(i < ModQuirks.QUIRKS.size()) {
-				Quirk q = ModQuirks.QUIRKS.get(i);
+			int i = new Random().nextInt(ModQuirks.QUIRKS.size()*3+1);
+			System.out.println("NUM: " + ModQuirks.QUIRKS.size());
+			if(i < ModQuirks.QUIRKS.size()*3) {
+				Quirk q = ModQuirks.QUIRKS.get(i%ModQuirks.QUIRKS.size());
 				event.player.addTag("quirk_" + q.getName());
 				event.player.addTag("qxp_0");
 				quirks = q.getName();
 				event.player.sendMessage(new TextComponentString("You got a quirk.It's " + q.getName()));
+				ModQuirks.getQuirkByName(quirks.replaceAll(" ", "")).setXp(0);
 			} else {
 				event.player.addTag("quirk_none");
 				event.player.addTag("qxp_0");

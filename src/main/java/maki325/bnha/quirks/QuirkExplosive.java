@@ -18,7 +18,7 @@ public class QuirkExplosive extends Quirk {
 		setLevelMinimum(100);
 		setLevelFactor(5);
 		setMaxActivatedTime(1);
-		setLevelUp(new LevelUp(1.2, 0.95));
+		setLevelUp(new LevelUp(0, 0.99));
 		setXpPerTick(1/20);
 	}
 
@@ -26,7 +26,7 @@ public class QuirkExplosive extends Quirk {
 	public void onPlayerUse(EntityPlayer player) {
 		p = player;
 		if(aviable) {
-			player.world.createExplosion(player, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), (float) (level * 1.25), true);
+			player.world.createExplosion(player, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), (float) (level * 0.1), true);
 			aviable = false;
 			xp += level * 2.75;
 		}
@@ -49,7 +49,6 @@ public class QuirkExplosive extends Quirk {
 				p.sendMessage(new TextComponentString(TextFormatting.AQUA + "Your now level " + level));
 			}
 			maxCooldown *= levelUp.getCooldownMultiplier();
-			maxAct *= levelUp.getActivatedMultiplier();		
 		}
 	}
 	

@@ -67,6 +67,7 @@ public abstract class Quirk {
 	public void setXp(double xp) {
 		this.xp = xp;
 		this.level = xpToLevel(xp);
+		System.out.println("LEVEL: " + level);
 		init();
 		if(xp == 0) {
 			nextXp = levelMinimum;
@@ -76,7 +77,7 @@ public abstract class Quirk {
 	}
 	
 	protected static void init() {
-		if(levelUp == null) return;
+		if(levelUp == null || level == 0) return;
 		
 		maxCooldown = (int) (maxCooldown * Math.pow(levelUp.getCooldownMultiplier(), level));
 		maxAct = (int) (maxAct * Math.pow(levelUp.getActivatedMultiplier(), level));
