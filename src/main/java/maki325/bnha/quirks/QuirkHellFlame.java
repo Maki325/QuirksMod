@@ -1,21 +1,26 @@
 package maki325.bnha.quirks;
 
+import com.jcraft.jorbis.Block;
+
 import maki325.bnha.api.LevelUp;
 import maki325.bnha.api.Quirk;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder.Spawn;
 
-public class QuirkExplosive extends Quirk {
-	
+public class QuirkHellFlame extends Quirk {
+
 	private static EntityPlayer p;
 	
-	public QuirkExplosive() {
-		super("explosive");
+	public QuirkHellFlame() {
+		super("hellflame");
+		
 		setMaxCooldown(2000);
 		setLevelMinimum(100);
 		setLevelFactor(5);
@@ -28,11 +33,16 @@ public class QuirkExplosive extends Quirk {
 	public void onPlayerUse(EntityPlayer player) {
 		p = player;
 		if(aviable) {
-			player.world.createExplosion(player, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), (float) (level * 0.1), true);
-			
+			player.world.newExplosion(player, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), (float) (2), true, false);
+
 			aviable = false;
 			xp += level * 2.75;
 		}
+	}
+	
+	@Override
+	public void onClient(WorldClient worldClient, double x, double y, double z) {
+		super.onClient(worldClient, x, y, z);
 	}
 
 	@SubscribeEvent

@@ -6,6 +6,7 @@ import java.util.List;
 import maki325.bnha.api.Quirk;
 import maki325.bnha.quirks.QuirkExplosive;
 import maki325.bnha.quirks.QuirkFly;
+import maki325.bnha.quirks.QuirkHellFlame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 
@@ -14,12 +15,12 @@ public class ModQuirks {
 	public static List<Quirk> QUIRKS = new ArrayList<Quirk>();
 	
 	//Quirks
-	public static Quirk explosive;
-	public static Quirk fly;
+	public static Quirk explosive, fly, hellflame;
 
 	public static void init() {
 		explosive = new QuirkExplosive();
-		explosive = new QuirkFly();
+		fly = new QuirkFly();
+		hellflame = new QuirkHellFlame();
 	}
 	
 	public static void registerEvents(EventBus bus) {

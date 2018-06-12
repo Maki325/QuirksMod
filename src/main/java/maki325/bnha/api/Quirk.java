@@ -1,8 +1,10 @@
 package maki325.bnha.api;
 
 import maki325.bnha.init.ModQuirks;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionAttackDamage;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -38,6 +40,9 @@ public abstract class Quirk {
 
 	@SubscribeEvent
 	public abstract void onPlayerUse(EntityPlayer player);
+	
+	@SubscribeEvent
+	public void onClient(WorldClient worldClient, double x, double y, double z) {}
 	
 	public String getName() {
 		return name;

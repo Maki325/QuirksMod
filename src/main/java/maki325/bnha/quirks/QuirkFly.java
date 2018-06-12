@@ -3,6 +3,7 @@ package maki325.bnha.quirks;
 import maki325.bnha.api.LevelUp;
 import maki325.bnha.api.Quirk;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,7 +20,7 @@ public class QuirkFly extends Quirk {
 		super("fly");
 
 		setMaxCooldown(200);
-		setMaxActivatedTime(50);
+		setMaxActivatedTime(200);
 		setLevelFactor(1.5);
 		setLevelMinimum(10);
 		setLevelUp(new LevelUp(1.1d, 0.9d));
@@ -35,6 +36,7 @@ public class QuirkFly extends Quirk {
 				activated = true;
 				
 				player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Quirk Activated"));
+				player.world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), 1, 1, 1, 0);
 				
 				player.sendPlayerAbilities();
 		} else {
