@@ -7,6 +7,6 @@ public class Reference {
 	public static final String MOD_NAME = "Boku no Hero Academia Mod";
 	
 	public static final String CLIENT_PROXY = "maki325.bnha.proxy.ClientProxy";
-    public static final String SERVER_PROXY = "maki325.bnha.proxy.ServerProxy";
+    public static final String SERVER_PROXY = "maki325.bnha.proxy.CommonProxy";
 	
 }

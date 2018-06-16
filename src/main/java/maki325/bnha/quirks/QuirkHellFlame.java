@@ -7,6 +7,9 @@ import maki325.bnha.api.Quirk;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -27,6 +30,8 @@ public class QuirkHellFlame extends Quirk {
 		setMaxActivatedTime(1);
 		setLevelUp(new LevelUp(0, 0.99));
 		setXpPerTick(1/20);
+		
+		init();
 	}
 
 	@Override
@@ -42,7 +47,7 @@ public class QuirkHellFlame extends Quirk {
 	
 	@Override
 	public void onClient(WorldClient worldClient, double x, double y, double z) {
-		super.onClient(worldClient, x, y, z);
+		worldClient.spawnParticle(EnumParticleTypes.DRAGON_BREATH, x, y, z, 0, 0, 0);
 	}
 
 	@SubscribeEvent

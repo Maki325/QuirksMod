@@ -1,12 +1,18 @@
 package maki325.bnha.proxy;
 
-import maki325.bnha.net.MessageHandlerOnClient;
-import maki325.bnha.net.MessageHandlerOnServer;
-import maki325.bnha.net.messages.MessageParticle;
-import maki325.bnha.net.messages.MessageQuirk;
+import maki325.bnha.capability.IQuirk;
+import maki325.bnha.capability.factory.FactoryQuirk;
+import maki325.bnha.capability.storage.QuirkStorage;
+import maki325.bnha.net.MessageHandlerActivateServer;
+import maki325.bnha.net.messages.MessageActivate;
 import maki325.bnha.util.Reference;
+import maki325.bnha.util.handlers.KeyInputHandler;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -14,16 +20,28 @@ public class CommonProxy {
 
 	public static SimpleNetworkWrapper simpleNetworkWrapper;
 	
-	public static final byte QUIRK_MESSAGE_ID = 35;
-	public static final byte PARTICLES_MESSAGE_ID = 49;
+	public static final byte ACTIVATE_SERVER_MESSAGE_ID = 39;
+	public static final byte ACTIVATE_CLIENT_MESSAGE_ID = 38;
 	
 	public void registerItemRenderer(Item item, int meta, String id) {}
 	
 	public void preInit() {
+		
+		CapabilityManager.INSTANCE.register(IQuirk.class, new QuirkStorage(), new FactoryQuirk());
+		
 		simpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
 		
-		simpleNetworkWrapper.registerMessage(MessageHandlerOnServer.class, MessageQuirk.class, QUIRK_MESSAGE_ID, Side.SERVER);
+		simpleNetworkWrapper.registerMessage(MessageHandlerActivateServer.class, MessageActivate.class, ACTIVATE_SERVER_MESSAGE_ID, Side.SERVER);
 		
+	}
+
+	public void init() {
+		
+		MinecraftForge.EVENT_BUS.register(KeyInputHandler.class);
+	}
+	
+	public EntityPlayer getPlayer(MessageContext ctx) {
+		return ctx.getServerHandler().player;
 	}
 	
 }

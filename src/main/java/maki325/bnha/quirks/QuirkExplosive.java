@@ -3,8 +3,7 @@ package maki325.bnha.quirks;
 import maki325.bnha.api.LevelUp;
 import maki325.bnha.api.Quirk;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -22,14 +21,15 @@ public class QuirkExplosive extends Quirk {
 		setMaxActivatedTime(1);
 		setLevelUp(new LevelUp(0, 0.99));
 		setXpPerTick(1/20);
+		
+		init();
 	}
 
 	@Override
 	public void onPlayerUse(EntityPlayer player) {
 		p = player;
 		if(aviable) {
-			player.world.createExplosion(player, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), (float) (level * 0.1), true);
-			
+			player.world.createExplosion(player, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), (float) (1), true);
 			aviable = false;
 			xp += level * 2.75;
 		}

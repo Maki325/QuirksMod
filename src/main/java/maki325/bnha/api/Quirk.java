@@ -3,6 +3,7 @@ package maki325.bnha.api;
 import maki325.bnha.init.ModQuirks;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionAttackDamage;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -36,6 +37,10 @@ public abstract class Quirk {
 	public Quirk(String name) {
 		this.name = name;
 		ModQuirks.QUIRKS.add(this);
+	}
+	
+	public Quirk(NBTTagCompound quirk) {
+		
 	}
 
 	@SubscribeEvent
@@ -81,7 +86,7 @@ public abstract class Quirk {
 		}
 	}
 	
-	protected static void init() {
+	public static void init() {
 		if(levelUp == null || level == 0) return;
 		
 		maxCooldown = (int) (maxCooldown * Math.pow(levelUp.getCooldownMultiplier(), level));
@@ -116,8 +121,54 @@ public abstract class Quirk {
 		return xp;
 	}
 	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
 	public static void addXp(double add) {
 		xp += add;
+	}
+	
+	public void setCooldown(int cooldown) {
+		this.cooldown = cooldown;
+	}
+	
+	public void setAct(int act) {
+		this.act = act;
+	}
+	
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
+	
+	public void setAviable(boolean aviable) {
+		this.aviable = aviable;
+	}
+	
+	public NBTTagCompound toNBT() {
+		NBTTagCompound tag = new NBTTagCompound();
+		
+		tag.setString("name", name);
+		
+		tag.setBoolean("activated", activated);
+		tag.setBoolean("aviable", aviable);
+		
+		//Level Stuff
+		tag.setDouble("xp", xp);
+		tag.setDouble("xpPerTick", xpPerTick);
+		tag.setInteger("level", level);
+		tag.setDouble("levelFactor", levelFactor);
+		tag.setDouble("levelMinimum", levelMinimum);
+		
+		//Cooldown
+		tag.setInteger("maxCooldown", maxCooldown);
+		tag.setInteger("cooldown", cooldown);
+		
+		//Activation Time
+		tag.setInteger("maxAct", maxAct);
+		tag.setInteger("act", act);
+		
+		return tag;
 	}
 	
 }

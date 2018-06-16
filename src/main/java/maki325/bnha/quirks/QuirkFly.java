@@ -25,6 +25,8 @@ public class QuirkFly extends Quirk {
 		setLevelMinimum(10);
 		setLevelUp(new LevelUp(1.1d, 0.9d));
 		setXpPerTick(1.5/20);
+		
+		init();
 	}
 
 	@Override
