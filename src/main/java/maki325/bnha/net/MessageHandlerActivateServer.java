@@ -1,6 +1,7 @@
 package maki325.bnha.net;
 
 import maki325.bnha.BnHA;
+import maki325.bnha.api.Quirk;
 import maki325.bnha.capability.IQuirk;
 import maki325.bnha.capability.providers.QuirkProvider;
 import maki325.bnha.net.messages.MessageActivate;
@@ -32,8 +33,11 @@ public class MessageHandlerActivateServer implements IMessageHandler<MessageActi
 	    	public void run() {
 	    		
 	    		IQuirk iquirk = sendingPlayer.getCapability(QuirkProvider.QUIRK_CAP, null);
-	    		iquirk.getQuirks().get(0).onPlayerUse(sendingPlayer);
+	    		Quirk q = iquirk.getQuirks().get(0);
+	    		if(q.isUsable()) {
+	    		q.onPlayerUse(sendingPlayer);
 	    		BnHA.proxy.simpleNetworkWrapper.sendToDimension(new MessageActivate(), sendingPlayer.dimension);
+	    		}
 	    		
 	    	}
 	    });

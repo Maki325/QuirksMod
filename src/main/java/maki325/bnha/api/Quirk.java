@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 public abstract class Quirk {
 
 	protected String name;
+	protected boolean isUsable = true;
 
 	protected static int cooldown = 0;
 	protected static int maxCooldown = 0;
@@ -143,6 +144,14 @@ public abstract class Quirk {
 	
 	public void setAviable(boolean aviable) {
 		this.aviable = aviable;
+	}
+	
+	public boolean isUsable() {
+		return isUsable;
+	}
+	
+	public void setUsable(boolean usable) {
+		isUsable = usable;
 	}
 	
 	public NBTTagCompound toNBT() {

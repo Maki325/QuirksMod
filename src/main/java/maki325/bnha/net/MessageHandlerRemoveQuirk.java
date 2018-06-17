@@ -38,7 +38,7 @@ public class MessageHandlerRemoveQuirk implements IMessageHandler<MessageRemoveQ
 	    	public void run() {
 	    		EntityPlayer player = playerWorldServer.getPlayerEntityByName(message.getPlayerName());
 	    		IQuirk iquirk = player.getCapability(QuirkProvider.QUIRK_CAP, null);
-	    		message.getQuirks().forEach(q -> iquirk.removeQuirks(q));
+	    		message.getQuirks().forEach(q -> q.setUsable(!q.isUsable()));
 	    	}
 	    });
 		
