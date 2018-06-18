@@ -6,10 +6,13 @@ import maki325.bnha.BnHA;
 import maki325.bnha.api.Quirk;
 import maki325.bnha.capability.IQuirk;
 import maki325.bnha.capability.providers.QuirkProvider;
+import maki325.bnha.gui.ofa.GuiHandlerOFA;
 import maki325.bnha.init.KeyBindings;
 import maki325.bnha.init.ModQuirks;
 import maki325.bnha.net.messages.MessageActivate;
+import maki325.bnha.net.messages.MessageGui;
 import maki325.bnha.quirks.QuirkNone;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,6 +29,16 @@ public class KeyInputHandler {
 			System.out.println("KEY F");
 			BnHA.proxy.simpleNetworkWrapper.sendToServer(new MessageActivate());
 		}
+		
+
+		if(KeyBindings.test.isPressed()){
+			//BnHA.proxy.simpleNetworkWrapper.sendToServer(new MessageGui());
+	    	EntityPlayer p = Minecraft.getMinecraft().player;
+	    	
+	    	p.openGui(BnHA.instance, GuiHandlerOFA.getGuiID(), Minecraft.getMinecraft().world, p.getPosition().getX(), p.getPosition().getY(), p.getPosition().getZ());
+    		
+		}
+		
 	}
 	
 	@SubscribeEvent
