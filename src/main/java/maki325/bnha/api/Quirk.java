@@ -1,60 +1,72 @@
 package maki325.bnha.api;
 
-import maki325.bnha.init.ModQuirks;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import maki325.bnha.BnHA;
+import maki325.bnha.api.skilltree.Skilltree;
+import maki325.bnha.net.quirk.messages.MessageChangeQuirk;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionAttackDamage;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class Quirk {
 
-	protected String name;
+	protected ResourceLocation id;
 	protected boolean isUsable = true;
 
-	protected static int cooldown = 0;
-	protected static int maxCooldown = 0;
+	protected EntityPlayerMP p = null;
+	
+	protected int cooldown = 0;
+	protected int maxCooldown = 0;
 
-	protected static int act = 0;
-	protected static int maxAct = 0;
+	protected int act = 0;
+	protected int maxAct = 0;
 	
-	protected static boolean activated = false;
-	protected static boolean aviable = true;
+	protected boolean activated = false;
+	protected boolean aviable = true;
 	
-	protected static double xp = 0;
-	protected static double nextXp = 0;
-	protected static double xpPerTick = 0;
+	public double xp = 0;
+	public double nextXp = 0;
+	protected double xpPerTick = 0;
 	
-	protected static int level = 0;
+	public int level = 0;
 	
-	protected static double levelFactor = 0;
-	protected static double levelMinimum = 0;
+	protected double levelFactor = 0;
+	protected double levelMinimum = 0;
 	
 	protected static LevelUp levelUp = null;
 	
-	public Quirk(String name) {
-		this.name = name;
-		ModQuirks.QUIRKS.add(this);
-	}
-	
-	public Quirk(NBTTagCompound quirk) {
-		
+	/**
+	 * 
+	 * @param name - name of the {@link Quirk}(small letters)
+	 * @param modId - id of the mod
+	 */
+	public Quirk(String name, String modId) {
+		this.id = new ResourceLocation(modId, name);
 	}
 
-	@SubscribeEvent
-	public abstract void onPlayerUse(EntityPlayer player);
+	/**
+	 * Function called every time player uses a quirk. Should call update function when changing the quirk(level, xp, etc)
+	 * @param player - player whose quirk should be activated
+	 */
+	public abstract void onPlayerUse(EntityPlayerMP player);
 	
-	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onClient(WorldClient worldClient, double x, double y, double z) {}
 	
+	public ResourceLocation getId() {
+		return id;
+	}
+
 	public String getName() {
-		return name;
+		return id.getResourcePath();
 	}
 	
-	public static int xpToLevel(double xp) {
+	public int xpToLevel(double xp) {
 		double i = levelMinimum;
 		int lvl = 1;
 		if(xp < i) return 1;
@@ -75,74 +87,89 @@ public abstract class Quirk {
 		return lvl;
 	}
 	
-	public void setXp(double xp) {
+	protected void setXp(double xp) {
 		this.xp = xp;
-		this.level = xpToLevel(xp);
-		System.out.println("LEVEL: " + level);
-		init();
-		if(xp == 0) {
-			nextXp = levelMinimum;
-		} else {
-			nextXp = xp * levelFactor;
-		}
 	}
 	
-	public static void init() {
+	public double getLevelFactor() {
+		return levelFactor;
+	}
+	
+	public void init() {
 		if(levelUp == null || level == 0) return;
 		
 		maxCooldown = (int) (maxCooldown * Math.pow(levelUp.getCooldownMultiplier(), level));
 		maxAct = (int) (maxAct * Math.pow(levelUp.getActivatedMultiplier(), level));
 	}
 	
-	public void setMaxCooldown(int _maxCooldown) {
+	public void reset() {
+		level = 1;
+		xp = 0;
+		nextXp = levelMinimum;
+		init();
+	}
+	
+	public double getLevelMinimum() {
+		return levelMinimum;
+	}
+	
+	public void check() {
+		if(nextXp == 0) {
+			nextXp = 100;
+			level = 1;
+		}
+		level = Math.max(1, level);
+	}
+	
+	protected void setMaxCooldown(int _maxCooldown) {
 		this.maxCooldown = _maxCooldown;
 	}
 	
-	public void setMaxActivatedTime(int _maxAct) {
+	protected void setMaxActivatedTime(int _maxAct) {
 		this.maxAct = _maxAct;
 	}
 	
-	public void setLevelUp(LevelUp _levelUp) {
+	protected void setLevelUp(LevelUp _levelUp) {
 		this.levelUp = _levelUp;
 	}
 	
-	public void setLevelFactor(double _levelFactor) {
+	protected void setLevelFactor(double _levelFactor) {
 		this.levelFactor = _levelFactor;
 	}
 	
-	public void setLevelMinimum(double _levelMinimum) {
+	protected void setLevelMinimum(double _levelMinimum) {
 		this.levelMinimum = _levelMinimum;
 	}
 	
-	public void setXpPerTick(double _xpPerTick) {
+	protected void setXpPerTick(double _xpPerTick) {
 		this.xpPerTick = _xpPerTick;
 	}
 	
-	public static double getXp() {
+	public double getXp() {
 		return xp;
 	}
 	
-	public void setLevel(int level) {
+	protected void setLevel(int level) {
 		this.level = level;
 	}
 	
-	public static void addXp(double add) {
+	protected void addXp(double add) {
 		xp += add;
 	}
 	
-	public void setCooldown(int cooldown) {
+	protected void setCooldown(int cooldown) {
 		this.cooldown = cooldown;
 	}
 	
-	public void setAct(int act) {
+	protected void setAct(int act) {
 		this.act = act;
 	}
 	
-	public void setActivated(boolean activated) {
+	protected void setActivated(boolean activated) {
 		this.activated = activated;
 	}
 	
-	public void setAviable(boolean aviable) {
+	protected void setAviable(boolean aviable) {
 		this.aviable = aviable;
 	}
 	
@@ -154,10 +181,30 @@ public abstract class Quirk {
 		isUsable = usable;
 	}
 	
+	public int getLevel() {
+		return this.level;
+	}
+	
+	public double getNextXP() {
+		return this.nextXp;
+	}
+	
+	public void setNextXP(double nextXp) {
+		this.nextXp = nextXp;
+	}
+			
+	public void update(EntityPlayerMP player) {
+		BnHA.proxy.simpleNetworkWrapper.sendToServer(new MessageChangeQuirk(this, player.getName(), true));
+	}
+	
+	protected abstract NBTTagCompound save();
+	
+	protected abstract void load(NBTTagCompound tag);
+	
 	public NBTTagCompound toNBT() {
 		NBTTagCompound tag = new NBTTagCompound();
 		
-		tag.setString("name", name);
+		tag.setString("name", id.getResourcePath());
 		
 		tag.setBoolean("activated", activated);
 		tag.setBoolean("aviable", aviable);
@@ -168,6 +215,7 @@ public abstract class Quirk {
 		tag.setInteger("level", level);
 		tag.setDouble("levelFactor", levelFactor);
 		tag.setDouble("levelMinimum", levelMinimum);
+		tag.setDouble("nextXp", nextXp);
 		
 		//Cooldown
 		tag.setInteger("maxCooldown", maxCooldown);
@@ -177,7 +225,93 @@ public abstract class Quirk {
 		tag.setInteger("maxAct", maxAct);
 		tag.setInteger("act", act);
 		
+		//Is type of Quirk
+		//(q.getClass().getSuperclass() == QuirkRegistry.getQuirkInstances().get(0)
+		/*for(Class<? extends Quirk> q:QuirkRegistry.getQuirkInstances()) {
+			if(this.getClass().getSuperclass() == q) {
+				tag.setBoolean("is" + q.getClass().getName(), true);
+				try {
+					Method m = this.getClass().getMethod("skillQuirkToNBT");
+					System.out.println("METHOD INVOKED toNBT");
+					tag.merge((NBTTagCompound) m.invoke(q));
+				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			} else {
+				tag.setBoolean("is" + q.getClass().getName(), false);
+			}
+		}*/ 
+		//tag.setBoolean("isSkill", (this instanceof QuirkSkill));
+		
+		tag.merge(save());
+		
 		return tag;
+	}
+	
+	//Functions that need to be static or need Quirk Function
+	
+	public static Quirk nbtToQuirk(NBTTagCompound tag) {
+		Quirk quirk = QuirkRegistry.getQuirkByName(tag.getString("name"));
+		if(quirk == null) return null;
+		
+		/*for(Class<? extends Quirk> q:QuirkRegistry.getQuirkInstances()) {
+			if(tag.getBoolean("is" + q.getClass().getName())) {
+				try {
+					Method m = quirk.getClass().getMethod("skillQuirkNbtToQuirk", NBTTagCompound.class);
+					System.out.println("METHOD INVOKED");
+					return (Quirk) m.invoke(quirk, tag);
+				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+		}*/
+		/*if(tag.getBoolean("isSkill")) {
+			return QuirkSkill.nbtToQuirk(tag);
+		}*/
+		
+		quirk.setActivated(tag.getBoolean("activated"));
+		quirk.setAviable(tag.getBoolean("aviable"));
+		
+		//Level Stuff
+		quirk.setXp(tag.getDouble("xp"));
+		quirk.setXpPerTick(tag.getDouble("xpPerTick"));
+		
+		quirk.setLevel(tag.getInteger("level"));
+		quirk.setLevelFactor(tag.getDouble("levelFactor"));
+		quirk.setLevelMinimum(tag.getDouble("levelMinimum"));
+		quirk.setNextXP(tag.getDouble("nextXp"));
+		
+		//Cooldown
+		quirk.setMaxCooldown(tag.getInteger("maxCooldown"));
+		quirk.setCooldown(tag.getInteger("cooldown"));
+
+		//Activation Time
+		quirk.setMaxActivatedTime(tag.getInteger("maxAct"));
+		quirk.setAct(tag.getInteger("act"));
+		
+		quirk.load(tag);
+		
+		return quirk;
+	}
+	
+	public static Quirk quirkLevel(String name, int level) {
+		Quirk q = QuirkRegistry.getQuirkByName(name);
+		q.setLevel((level <= 0) ? 1 : level);
+		
+		return q;
+	}
+	
+	public boolean isSimilar(Quirk q) {
+		return getName().equalsIgnoreCase(q.getName());
+	}
+	
+	public static boolean isSimilar(Quirk q1, Quirk q2) {
+		return q1.getName().equalsIgnoreCase(q2.getName());
+	}
+	
+	@Override
+	public String toString() {
+		return id.toString() + " - Level: " + level + ", XP: " + xp;
 	}
 	
 }

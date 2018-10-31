@@ -26,8 +26,8 @@ public class GuiOFA extends GuiScreen {
 	private List<EntityPlayer> players;
 	private int page = 1;
 	
-	private static final ResourceLocation background = new ResourceLocation(Reference.MOD_ID, "textures/gui/background.png");
-	private static final ResourceLocation tab = new ResourceLocation(Reference.MOD_ID, "textures/gui/tab.png");
+	private static final ResourceLocation background = new ResourceLocation(Reference.MOD_ID, "textures/gui/ofa/background.png");
+	private static final ResourceLocation tab = new ResourceLocation(Reference.MOD_ID, "textures/gui/ofa/tab.png");
 	
 	public GuiOFA(EntityPlayer player) {
 		players = player.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(new BlockPos(player.posX-5, player.posY-5, player.posZ-5), new BlockPos(player.posX+5, player.posY+5, player.posZ+5)));

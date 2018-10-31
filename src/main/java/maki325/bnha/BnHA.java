@@ -1,24 +1,29 @@
 package maki325.bnha;
 
-import maki325.bnha.capability.IQuirk;
-import maki325.bnha.capability.providers.QuirkProvider;
-import maki325.bnha.init.KeyBindings;
-import maki325.bnha.init.ModQuirks;
+import java.lang.reflect.AnnotatedElement;
+
+import org.apache.logging.log4j.Logger;
+
+import maki325.bnha.api.QuirkRegistry;
+import maki325.bnha.api.QuirkSkill;
+import maki325.bnha.commands.CommandQuirk;
 import maki325.bnha.proxy.CommonProxy;
+import maki325.bnha.quirks.QuirkFly;
+import maki325.bnha.quirks.QuirkHellFlame;
+import maki325.bnha.quirks.explosion.QuirkExplosive;
 import maki325.bnha.util.Reference;
 import maki325.bnha.util.handlers.CapabilityHandler;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.4.2705,)", acceptedMinecraftVersions = "[1.12,1.12.2]")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.4.2705,)", acceptedMinecraftVersions = "[1.12,1.12.2]", useMetadata = true)
 public class BnHA {
 
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY)
@@ -27,38 +32,37 @@ public class BnHA {
 	@Instance
 	public static BnHA instance;
 	
+	public static Logger logger;
+	
 	@Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 		
-		KeyBindings.init();
+		logger = event.getModLog();
 		
-		ModQuirks.init();
+		QuirkRegistry.addQuirk(new QuirkExplosive());
+		QuirkRegistry.addQuirk(new QuirkFly());
+		QuirkRegistry.addQuirk(new QuirkHellFlame());
+		
+		QuirkRegistry.registerQuirkInstance(QuirkSkill.class);
 		
 		proxy.preInit();
 	}
 	
 	@Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-		
 		proxy.init();
-		
-		MinecraftForge.EVENT_BUS.register(this);
+
 		MinecraftForge.EVENT_BUS.register(CapabilityHandler.class);
-		ModQuirks.registerEvents(MinecraftForge.EVENT_BUS);
 	}
 
 	@Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-
+		proxy.postInit();
 	}
-	
-	@SubscribeEvent 
-	public void onPlayerClone(PlayerEvent.Clone event) { 
-		EntityPlayer player = event.getEntityPlayer(); 
-		IQuirk mana = player.getCapability(QuirkProvider.QUIRK_CAP, null); 
-		IQuirk oldMana = event.getOriginal().getCapability(QuirkProvider.QUIRK_CAP, null); 
-	
-		oldMana.getQuirks().forEach(q -> mana.addQuirks(q));
+
+	@Mod.EventHandler
+	public void serverStarting(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandQuirk());
 	}
 	
 }

@@ -2,22 +2,19 @@ package maki325.bnha.quirks;
 
 import maki325.bnha.api.LevelUp;
 import maki325.bnha.api.Quirk;
-import net.minecraft.entity.player.EntityPlayer;
+import maki325.bnha.util.Reference;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.config.GuiConfigEntries.ChatColorEntry;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 
 public class QuirkFly extends Quirk {
 	
-	private static EntityPlayer p;
-	
 	public QuirkFly() {
-		super("fly");
+		super("fly", Reference.MOD_ID);
 
 		setMaxCooldown(200);
 		setMaxActivatedTime(200);
@@ -30,7 +27,7 @@ public class QuirkFly extends Quirk {
 	}
 
 	@Override
-	public void onPlayerUse(EntityPlayer player) {
+	public void onPlayerUse(EntityPlayerMP player) {
 		p = player;
 		if(!aviable) { return; }
 		if(!activated) {
@@ -61,7 +58,7 @@ public class QuirkFly extends Quirk {
 	}
 
 	@SubscribeEvent
-	public static void tick(ServerTickEvent event) {
+	public void tick(ServerTickEvent event) {
 		if(!aviable) {
 			cooldown++;
 			if(cooldown >= maxCooldown) {
@@ -101,5 +98,13 @@ public class QuirkFly extends Quirk {
 			}
 		}
 	}
+
+	@Override
+	protected NBTTagCompound save() { return new NBTTagCompound(); }
+
+	@Override
+	protected void load(NBTTagCompound tag) {}
+	
+	
 	
 }

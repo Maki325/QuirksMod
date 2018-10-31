@@ -2,18 +2,15 @@ package maki325.bnha.util;
 
 import maki325.bnha.BnHA;
 import maki325.bnha.api.Quirk;
-import maki325.bnha.capability.IQuirk;
-import maki325.bnha.capability.providers.QuirkProvider;
-import maki325.bnha.init.ModQuirks;
-import maki325.bnha.net.messages.MessageRemoveQuirk;
-import net.minecraft.client.Minecraft;
+import maki325.bnha.capability.quirk.IQuirk;
+import maki325.bnha.capability.quirk.providers.QuirkProvider;
+import maki325.bnha.net.quirk.messages.MessageRemoveQuirk;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class Utils {
 
-	public static Quirk nbtToQuirk(NBTTagCompound tag) {
-		Quirk quirk = ModQuirks.getQuirkByName(tag.getString("name"));
+	/*public static Quirk nbtToQuirk(NBTTagCompound tag) {
+		Quirk quirk = QuirkRegistry.getQuirkByName(tag.getString("name"));
 		
 		quirk.setActivated(tag.getBoolean("activated"));
 		quirk.setAviable(tag.getBoolean("aviable"));
@@ -35,7 +32,7 @@ public class Utils {
 		quirk.setAct(tag.getInteger("act"));
 		
 		return quirk;
-	}
+	}*/
 	
 	public static void removeQuirk(EntityPlayer player, Quirk... quirks) {
 		BnHA.proxy.simpleNetworkWrapper.sendToServer(new MessageRemoveQuirk(player.getName(), quirks));
@@ -49,6 +46,27 @@ public class Utils {
 	
 	public static boolean isMouseInside(int mouseX, int mouseY, int x1, int y1, int x2, int y2) {
 		return mouseX >= x1 && mouseX < x2 && mouseY >= y1 && mouseY < y2;
+	}
+	
+	/**
+	 * 
+	 * @param array - Array tested for being empty
+	 * @return Returns <code>-1</code> if every element in the array
+	 * 			is <code>null</code> or the position of the element
+	 * 			that isn't <code>null</code>
+	 * 
+	 * @author Maki325
+	 */
+	public static int isArrayEmpty(Object[] array) {
+		if(array == null)
+			return -1;
+		
+		for(int i = 0;i < array.length;i++) {
+			if(array[i] != null) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 }
