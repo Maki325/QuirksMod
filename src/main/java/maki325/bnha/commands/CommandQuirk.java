@@ -34,6 +34,7 @@ public class CommandQuirk extends CommandBase {
 		pos1.add(set.getName());
 		pos1.add(get.getName());
 		pos1.add(points.getName());
+		pos1.add(skill.getName());
 		
 		ret = new ArrayList<String>();
 		ret.add("quirk");
@@ -47,7 +48,7 @@ public class CommandQuirk extends CommandBase {
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return set.usage + " or " + get.usage + " or " + skill.usage;
+		return set.usage + " or " + get.usage + " or " + skill.usage + " or " + points.usage;
 	}
 	
 	@Override
@@ -81,7 +82,7 @@ public class CommandQuirk extends CommandBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if(args.length < 2)
-			throw new CommandException("Usage: " + set.usage + " or \n" + get.usage + " or \n" + skill.usage);
+			throw new CommandException("Usage: " + set.usage + " or \n" + get.usage + " or \n" + skill.usage + " or \n" + points.usage);
 		
 		if(args[0].equalsIgnoreCase("set")) {
 			
@@ -100,7 +101,7 @@ public class CommandQuirk extends CommandBase {
 			points.execute(server, sender, args);
 			
 		} else {
-			throw new CommandException("Usage: " + set.usage + " or \n" + get.usage + " or \n" + skill.usage);
+			throw new CommandException("Usage: " + set.usage + " or \n" + get.usage + " or \n" + skill.usage + " or \n" + points.usage);
 		}
 	}
 

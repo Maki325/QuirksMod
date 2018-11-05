@@ -45,7 +45,6 @@ public class EventHandlerServer {
 				event.player.sendMessage(new TextComponentString("Bad luck. You got no quirks. Maybe you can find some in the wild"));
 			}
 		}
-		System.out.println(iquirk.getQuirks().get(0).toString());
 		iquirk.getQuirks().get(0).check();
 		iquirk.getQuirks().get(0).init();
 		

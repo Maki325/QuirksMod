@@ -29,7 +29,6 @@ public class QuirkExplosive extends QuirkSkill {
 		super.tick(event);
 		if(xp >= nextXp) {
 			level++;
-			System.out.println("Level: " + level);
 			nextXp = xp * levelFactor;
 			if(p != null) {
 				p.sendMessage(new TextComponentString(TextFormatting.AQUA + "Level Up"));

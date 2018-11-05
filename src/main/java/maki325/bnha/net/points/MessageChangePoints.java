@@ -2,29 +2,25 @@ package maki325.bnha.net.points;
 
 import io.netty.buffer.ByteBuf;
 import maki325.bnha.api.Quirk;
+import maki325.bnha.api.net.BnHAMessage;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class MessageChangePoints implements IMessage {
+public class MessageChangePoints extends BnHAMessage {
 
 	private String playeName;
 	private int points;
-	private boolean isValid;
 	private Change change;
 	
 	public MessageChangePoints() {
-		isValid = false;
+		super();
 	}
 	
 	public MessageChangePoints(int points, Change change, String playeName) {
-		isValid = true;
+		super(null);
 		this.playeName = playeName;
 		this.points = points;
 		this.change = change;
-	}
-	
-	public boolean isValid() {
-		return isValid;
 	}
 	
 	public int getPoints() {
@@ -41,10 +37,10 @@ public class MessageChangePoints implements IMessage {
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
+		super.fromBytes(buf);
 		this.playeName = ByteBufUtils.readUTF8String(buf);
 		this.points = buf.readInt();
 		this.change = Change.values()[buf.readInt()];
-		this.isValid = true;
 	}
 
 	@Override

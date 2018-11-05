@@ -36,7 +36,6 @@ public class MessageHandlerActivateServer implements IMessageHandler<MessageActi
 	    		IQuirk iquirk = sendingPlayer.getCapability(QuirkProvider.QUIRK_CAP, null);
 	    		Quirk q = iquirk.getQuirks().get(0);
 	    		if(q == null) {
-		    		System.out.println("QUIRK IS NULL");
 		    		return;
 	    		}
 	    		if(q.isUsable()) {

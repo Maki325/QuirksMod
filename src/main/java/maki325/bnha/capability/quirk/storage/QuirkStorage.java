@@ -18,7 +18,6 @@ public class QuirkStorage implements IStorage<IQuirk> {
 		int i = 0;
 		for(Quirk q:instance.getQuirks()) {
 			if(q == null) {
-				System.out.println("QUIRK IS NULL");
 				continue;
 			}
 			tag.setTag("" + i, q.toNBT());

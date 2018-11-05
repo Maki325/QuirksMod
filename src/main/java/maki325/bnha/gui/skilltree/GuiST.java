@@ -258,7 +258,6 @@ public class GuiST extends GuiScreen {
 				} else {
 					if(iquirk.getPoints() >= skill.getPrice()) {
 						skill.setActive(true);
-						//iquirk.removePoints(skill.getPrice());
 						BnHA.proxy.simpleNetworkWrapper.sendToServer(new MessageChangePoints(skill.getPrice(), MessageChangePoints.Change.REMOVE, player.getName()));
 						player.sendMessage(new TextComponentString("You bought skill " + skill.getName() + " for " + skill.getPrice() + " points. You now have " + (iquirk.getPoints()-skill.getPrice()) + " points."));
 					} else {
@@ -280,7 +279,6 @@ public class GuiST extends GuiScreen {
 				drawTexturedModalRect(px - 6, yp + 2 + 20, 0, 0, 16, 16);
 				
 				if(Mouse.isButtonDown(0) && isInside(mouseX, mouseY, px - 6, yp + 22, px - 6 + 16, yp + 22 + 16)) {
-					println("ACTIVATE");
 					skill.setActive(true);
 					buttonsPressed[0] = true;
 				}
@@ -290,7 +288,6 @@ public class GuiST extends GuiScreen {
 				drawTexturedModalRect(px - 26, yp + 2 + 20, 16, 0, 16, 16);
 				
 				if(Mouse.isButtonDown(0) && isInside(mouseX, mouseY, px - 26, yp + 22, px - 26 + 16, yp + 22 + 16)) {
-					println("DEACTIVE");
 					skill.setActive(false);
 					buttonsPressed[0] = true;
 				}

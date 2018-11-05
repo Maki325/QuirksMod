@@ -40,32 +40,18 @@ public class CommonProxy {
 
 	public static SimpleNetworkWrapper simpleNetworkWrapper;
 	
-	public static final byte ACTIVATE_CLIENT_MESSAGE_ID = 30;
-	public static final byte ACTIVATE_SERVER_MESSAGE_ID = 39;
-	public static final byte ACTIVATE_CLIENT_SERVER_MESSAGE_ID = 40;
-	//REMOVE QUIRK
-	public static final byte REMOVE_QUIRK_MESSAGE_ID = 42;
-	//ADD QUIRK
-	public static final byte ADD_QUIRK_MESSAGE_ID = 59;
-	public static final byte ADD_QUIRK_SERVER_MESSAGE_ID = 60;
-	//CHANGE QUIRK
-	public static final byte CHANGE_QUIRK_CLIENT_MESSAGE_ID = 67;
-	public static final byte CHANGE_QUIRK_SERVER_MESSAGE_ID = 68;
+	public static final byte ACTIVATE_MESSAGE_ID = 1;
+	public static final byte ACTIVATE_CLIENT_MESSAGE_ID = 2;
 	
-	public static final byte CHANGE_ADD_TAG_CLIENT_MESSAGE_ID = 5;
-	public static final byte CHANGE_REMOVE_TAG_CLIENT_MESSAGE_ID = 6;
+	public static final byte ADD_QUIRK_MESSAGE_ID = 3;
+	public static final byte CHANGE_QUIRK_MESSAGE_ID = 4;
 	
-	public static final byte CHANGE_ADD_TAG_SERVER_MESSAGE_ID = 7;
-	public static final byte CHANGE_REMOVE_TAG_SERVER_MESSAGE_ID = 8;
+	public static final byte ADD_TAG_MESSAGE_ID = 5;
+	public static final byte REMOVE_TAG_MESSAGE_ID = 6;
 
-	//POINT SYSTEM
-	public static final byte POINTS_SERVER_MESSAGE_ID = 17;
-	public static final byte POINTS_CLIENT_MESSAGE_ID = 18;
-	
+	public static final byte CHANGE_POINTS_MESSAGE_ID = 7;
 
-	//HUD SKILL SYSTEM
-	public static final byte HUD_SKILL_SERVER_MESSAGE_ID = 10;
-	public static final byte HUD_SKILL_CLIENT_MESSAGE_ID = 11;
+	public static final byte CHANGE_HUD_SKILL_MESSAGE_ID = 8;
 
 	public void registerItemRenderer(Item item, int meta, String id) {}
 	
@@ -75,25 +61,24 @@ public class CommonProxy {
 		
 		simpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
 		
-		simpleNetworkWrapper.registerMessage(MessageHandlerActivateServer.class, MessageActivate.class, ACTIVATE_SERVER_MESSAGE_ID, Side.SERVER);
+		simpleNetworkWrapper.registerMessage(MessageHandlerActivateServer.class, MessageActivate.class, ACTIVATE_MESSAGE_ID, Side.SERVER);
+		simpleNetworkWrapper.registerMessage(MessageHandlerActivateClientServer.class, MessageActivateClient.class, ACTIVATE_CLIENT_MESSAGE_ID, Side.SERVER);
 		
-		simpleNetworkWrapper.registerMessage(MessageHandlerRemoveQuirk.class, MessageRemoveQuirk.class, REMOVE_QUIRK_MESSAGE_ID, Side.SERVER);
+		simpleNetworkWrapper.registerMessage(MessageHandlerAddQuirkServer.class, MessageAddQuirk.class, ADD_QUIRK_MESSAGE_ID, Side.SERVER);
 		
-		simpleNetworkWrapper.registerMessage(MessageHandlerAddQuirkServer.class, MessageAddQuirk.class, ADD_QUIRK_SERVER_MESSAGE_ID, Side.SERVER);
+		simpleNetworkWrapper.registerMessage(MessageHandlerChangeQuirkServer.class, MessageChangeQuirk.class, CHANGE_QUIRK_MESSAGE_ID, Side.SERVER);
 		
-		simpleNetworkWrapper.registerMessage(MessageHandlerActivateClientServer.class, MessageActivateClient.class, ACTIVATE_CLIENT_SERVER_MESSAGE_ID, Side.SERVER);
-		
-		simpleNetworkWrapper.registerMessage(MessageHandlerChangeQuirkServer.class, MessageChangeQuirk.class, CHANGE_QUIRK_SERVER_MESSAGE_ID, Side.SERVER);
+		//simpleNetworkWrapper.registerMessage(MessageHandlerRemoveQuirk.class, MessageRemoveQuirk.class, REMOVE_QUIRK_MESSAGE_ID, Side.SERVER);
 		
 		//TAG
-		simpleNetworkWrapper.registerMessage(MessageHandlerAddTagServer.class, MessageAddTag.class, CHANGE_ADD_TAG_SERVER_MESSAGE_ID, Side.SERVER);
-		simpleNetworkWrapper.registerMessage(MessageHandlerRemoveTagServer.class, MessageRemoveTag.class, CHANGE_REMOVE_TAG_SERVER_MESSAGE_ID, Side.SERVER);
+		simpleNetworkWrapper.registerMessage(MessageHandlerAddTagServer.class, MessageAddTag.class, ADD_TAG_MESSAGE_ID, Side.SERVER);
+		simpleNetworkWrapper.registerMessage(MessageHandlerRemoveTagServer.class, MessageRemoveTag.class, REMOVE_TAG_MESSAGE_ID, Side.SERVER);
 		
 		//POINT SYSTEM
-		simpleNetworkWrapper.registerMessage(MessageHandlerChangePointsServer.class, MessageChangePoints.class, POINTS_SERVER_MESSAGE_ID, Side.SERVER);
+		simpleNetworkWrapper.registerMessage(MessageHandlerChangePointsServer.class, MessageChangePoints.class, CHANGE_POINTS_MESSAGE_ID, Side.SERVER);
 		
 		//HUD SKILL SYSTEM
-		simpleNetworkWrapper.registerMessage(MessageHandlerChangeHudSkillServer.class, MessageChangeHudSkill.class, HUD_SKILL_SERVER_MESSAGE_ID, Side.SERVER);
+		simpleNetworkWrapper.registerMessage(MessageHandlerChangeHudSkillServer.class, MessageChangeHudSkill.class, CHANGE_HUD_SKILL_MESSAGE_ID, Side.SERVER);
 		
 		
 		MinecraftForge.EVENT_BUS.register(EventHandlerServer.class);

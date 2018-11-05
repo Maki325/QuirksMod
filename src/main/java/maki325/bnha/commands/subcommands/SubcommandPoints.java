@@ -21,7 +21,7 @@ import scala.actors.threadpool.Arrays;
 
 public class SubcommandPoints extends Subcommand {
 
-	public static final String usage = "/quirk skill <set/add/remove/reset/get> <amount> [player name]";
+	public static final String usage = "/quirk points <set/add/remove/reset/get> <amount> [player name]";
 	private List<String> setters;// = Arrays.asList(new String[] { "quirk", "level", "xp" });
 	
 	public SubcommandPoints() {

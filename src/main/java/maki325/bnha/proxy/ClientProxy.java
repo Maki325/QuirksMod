@@ -51,17 +51,17 @@ public class ClientProxy extends CommonProxy {
 		
 		CommonProxy.simpleNetworkWrapper.registerMessage(MessageHandlerAddQuirk.class, MessageAddQuirk.class, ADD_QUIRK_MESSAGE_ID, Side.CLIENT);
 		
-		simpleNetworkWrapper.registerMessage(MessageHandlerChangeQuirkClient.class, MessageChangeQuirk.class, CHANGE_QUIRK_CLIENT_MESSAGE_ID, Side.CLIENT);
+		simpleNetworkWrapper.registerMessage(MessageHandlerChangeQuirkClient.class, MessageChangeQuirk.class, CHANGE_QUIRK_MESSAGE_ID, Side.CLIENT);
 
 		//TAG
-		simpleNetworkWrapper.registerMessage(MessageHandlerAddTagClient.class, MessageAddTag.class, CHANGE_ADD_TAG_CLIENT_MESSAGE_ID, Side.CLIENT);
-		simpleNetworkWrapper.registerMessage(MessageHandlerRemoveTagClient.class, MessageRemoveTag.class, CHANGE_REMOVE_TAG_CLIENT_MESSAGE_ID, Side.CLIENT);
+		simpleNetworkWrapper.registerMessage(MessageHandlerAddTagClient.class, MessageAddTag.class, ADD_TAG_MESSAGE_ID, Side.CLIENT);
+		simpleNetworkWrapper.registerMessage(MessageHandlerRemoveTagClient.class, MessageRemoveTag.class, REMOVE_TAG_MESSAGE_ID, Side.CLIENT);
 
 		//POINT SYSTEM
-		simpleNetworkWrapper.registerMessage(MessageHandlerChangePointsClient.class, MessageChangePoints.class, POINTS_CLIENT_MESSAGE_ID, Side.CLIENT);
+		simpleNetworkWrapper.registerMessage(MessageHandlerChangePointsClient.class, MessageChangePoints.class, CHANGE_POINTS_MESSAGE_ID, Side.CLIENT);
 
 		//HUD SKILL SYSTEM
-		simpleNetworkWrapper.registerMessage(MessageHandlerChangeHudSkillClient.class, MessageChangeHudSkill.class, HUD_SKILL_CLIENT_MESSAGE_ID, Side.CLIENT);
+		simpleNetworkWrapper.registerMessage(MessageHandlerChangeHudSkillClient.class, MessageChangeHudSkill.class, CHANGE_HUD_SKILL_MESSAGE_ID, Side.CLIENT);
 		
 		MinecraftForge.EVENT_BUS.register(EventHandler.class);
 		

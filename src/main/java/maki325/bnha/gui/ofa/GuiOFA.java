@@ -69,8 +69,6 @@ public class GuiOFA extends GuiScreen {
 		FontRenderer f = mc.fontRenderer;
 		f.drawString(text, posX + xSize/2 - f.getStringWidth(text)/2, posY+5, Color.white.getRGB(), true);
 		
-		//System.out.println(players.get(0).getName());
-		
 		for(int i = 1;i <= 4;i++) {
 			if(i*page > players.size()) { break; }
 			

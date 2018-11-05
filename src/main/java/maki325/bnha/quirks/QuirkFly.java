@@ -77,8 +77,6 @@ public class QuirkFly extends Quirk {
 				maxCooldown *= levelUp.getCooldownMultiplier();
 				maxAct *= levelUp.getActivatedMultiplier();		
 			}
-			System.out.println(act);
-			System.out.println("XP IS: "+xp);
 			if(act >= maxAct) {
 				activated = false;
 				
