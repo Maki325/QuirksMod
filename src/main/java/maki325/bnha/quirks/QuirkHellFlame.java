@@ -36,8 +36,8 @@ public class QuirkHellFlame extends Quirk {
 		}
 	}
 
-	@SubscribeEvent
-	public void tick(ServerTickEvent event) {
+	@Override
+	public void tick() {
 		if(!aviable) {
 			cooldown++;
 			if(cooldown >= maxCooldown) {

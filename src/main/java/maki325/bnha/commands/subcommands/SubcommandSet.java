@@ -19,6 +19,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import scala.actors.threadpool.Arrays;
 
 public class SubcommandSet extends Subcommand {
@@ -104,9 +105,13 @@ public class SubcommandSet extends Subcommand {
 					if(QuirkRegistry.getQuirkByName(value) == null) {
 						throw new CommandException("Quirk you selected (" + value + ") doesn't exist!");
 					}
-					
-					q = QuirkRegistry.getQuirkByName(value);
-					q.level = 0;
+
+					try {
+						q = QuirkRegistry.getQuirkByName(value).getClass().newInstance();
+					} catch (InstantiationException | IllegalAccessException e) {
+						q = QuirkRegistry.getQuirkByName(value);
+					}
+					q.level = 1;
 					q.xp = 0;
 					q.nextXp = q.getLevelMinimum();
 					
@@ -153,7 +158,16 @@ public class SubcommandSet extends Subcommand {
 	}
 	
 	public void changeQuirk(Quirk quirk, EntityPlayerMP player, boolean quiet) {
-		player.getCapability(QuirkProvider.QUIRK_CAP, null).getQuirks().set(0, quirk);
+		IQuirk iquirk = player.getCapability(QuirkProvider.QUIRK_CAP, null);
+		if(!iquirk.getQuirks().isEmpty()) {
+			MinecraftForge.EVENT_BUS.unregister(iquirk.getQuirks().get(0));
+			iquirk.getQuirks().set(0, quirk);
+			MinecraftForge.EVENT_BUS.register(iquirk.getQuirks().get(0));
+		} else {
+			iquirk.addQuirks(quirk);
+			MinecraftForge.EVENT_BUS.register(iquirk.getQuirks().get(0));
+		}
+		
 		BnHA.proxy.simpleNetworkWrapper.sendTo(new MessageChangeQuirk(quirk, player.getName(), quiet), player);
 	}
 

@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -43,11 +44,15 @@ public class MessageHandlerChangeQuirkServer implements IMessageHandler<MessageC
 	    		}
 	    		
 	    		IQuirk iquirk = player.getCapability(QuirkProvider.QUIRK_CAP, null);
-	    		if(!iquirk.getQuirks().isEmpty())
+	    		if(!iquirk.getQuirks().isEmpty()) {
+	    			MinecraftForge.EVENT_BUS.unregister(iquirk.getQuirks().get(0));
 	    			iquirk.getQuirks().set(0, message.getQuirk());
-	    		else
+	    			MinecraftForge.EVENT_BUS.register(iquirk.getQuirks().get(0));
+	    		} else {
 	    			iquirk.addQuirks(message.getQuirk());
-	    		
+	    			MinecraftForge.EVENT_BUS.register(iquirk.getQuirks().get(0));
+	    		}
+	    			
     			sendingPlayer.sendMessage(new TextComponentString(TextFormatting.GREEN + "You changed the quirk to " + TextFormatting.BOLD + message.getQuirk().getName()));
 	    		
 	    		BnHA.proxy.simpleNetworkWrapper.sendTo(new MessageChangeQuirk(message.getQuirk(), message.getPlayeName(), message.isQuiet()), player);

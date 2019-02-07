@@ -23,4 +23,7 @@ public class QuirkNone extends Quirk {
 	@Override
 	public void load(NBTTagCompound tag) {}
 
+	@Override
+	public void tick() {}
+
 }

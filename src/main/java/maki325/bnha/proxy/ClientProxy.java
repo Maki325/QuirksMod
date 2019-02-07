@@ -12,11 +12,17 @@ import maki325.bnha.api.skilltree.Skill;
 import maki325.bnha.api.skilltree.SkillRegistry;
 import maki325.bnha.gui.hud.GuiHud;
 import maki325.bnha.gui.hud.HudHandler;
+import maki325.bnha.gui.progressbar.GuiProgressBar;
+import maki325.bnha.gui.progressbar.ProgressBarHandler;
 import maki325.bnha.gui.skilltree.GuiST;
 import maki325.bnha.net.playerjoin.MessageHandlerAddQuirk;
 import maki325.bnha.net.playerjoin.messages.MessageAddQuirk;
 import maki325.bnha.net.points.MessageChangePoints;
 import maki325.bnha.net.points.MessageHandlerChangePointsClient;
+import maki325.bnha.net.progress.active.MessageHandlerActiveProgressClient;
+import maki325.bnha.net.progress.cooldown.MessageCooldownProgress;
+import maki325.bnha.net.progress.cooldown.MessageHandlerCooldownProgressClient;
+import maki325.bnha.net.progress.active.MessageActiveProgress;
 import maki325.bnha.net.quirk.MessageHandlerActivateClient;
 import maki325.bnha.net.quirk.MessageHandlerChangeQuirkClient;
 import maki325.bnha.net.quirk.hud.MessageChangeHudSkill;
@@ -63,6 +69,10 @@ public class ClientProxy extends CommonProxy {
 		//HUD SKILL SYSTEM
 		simpleNetworkWrapper.registerMessage(MessageHandlerChangeHudSkillClient.class, MessageChangeHudSkill.class, CHANGE_HUD_SKILL_MESSAGE_ID, Side.CLIENT);
 		
+		//Progress
+		simpleNetworkWrapper.registerMessage(MessageHandlerCooldownProgressClient.class, MessageCooldownProgress.class, COOLDOWN_PROGRESS_MESSAGE_ID, Side.CLIENT);
+		simpleNetworkWrapper.registerMessage(MessageHandlerActiveProgressClient.class, MessageActiveProgress.class, ACTIVE_PROGRESS_MESSAGE_ID, Side.CLIENT);
+		
 		MinecraftForge.EVENT_BUS.register(EventHandler.class);
 		
 	}
@@ -73,6 +83,7 @@ public class ClientProxy extends CommonProxy {
 	}
 	
 	private static GuiHud hud;
+	private static GuiProgressBar progressBar;
 	
 	@Override
 	public void postInit() {
@@ -82,6 +93,9 @@ public class ClientProxy extends CommonProxy {
         
 		hud = new GuiHud(Minecraft.getMinecraft());
 		MinecraftForge.EVENT_BUS.register(new HudHandler(hud));
+		
+		progressBar = new GuiProgressBar(Minecraft.getMinecraft());
+		MinecraftForge.EVENT_BUS.register(new ProgressBarHandler(progressBar));
 	}
 	
 	public EntityPlayer getPlayer(MessageContext ctx) {

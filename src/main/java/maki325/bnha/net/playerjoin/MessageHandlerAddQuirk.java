@@ -31,9 +31,11 @@ public class MessageHandlerAddQuirk implements IMessageHandler<MessageAddQuirk, 
 	    
 	    minecraft.addScheduledTask(new Runnable() {
 	    	public void run() {
-	    		
+
 	    		IQuirk iquirk = minecraft.player.getCapability(QuirkProvider.QUIRK_CAP, null);
 	    		iquirk.addQuirks(message.getQuirk());
+	    		
+	    		System.out.println(message.getQuirk().getName());
 	    		
 	    	}
 	    });

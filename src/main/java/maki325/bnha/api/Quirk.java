@@ -5,11 +5,15 @@ import java.lang.reflect.Method;
 
 import maki325.bnha.BnHA;
 import maki325.bnha.api.skilltree.Skilltree;
+import maki325.bnha.net.progress.active.MessageActiveProgress;
+import maki325.bnha.net.progress.cooldown.MessageCooldownProgress;
 import maki325.bnha.net.quirk.messages.MessageChangeQuirk;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,11 +24,17 @@ public abstract class Quirk {
 
 	protected EntityPlayerMP p = null;
 	
-	protected int cooldown = 0;
-	protected int maxCooldown = 0;
+	protected double cooldown = 0;
+	protected double maxCooldown = 0;
+	
+	private int cooldownProgress = 0;
+	private int cooldownProgressLast = 0;
+	
+	private int activeProgress = 0;
+	private int activeProgressLast = 0;
 
-	protected int act = 0;
-	protected int maxAct = 0;
+	protected double act = 0;
+	protected double maxAct = 0;
 	
 	protected boolean activated = false;
 	protected boolean aviable = true;
@@ -57,6 +67,85 @@ public abstract class Quirk {
 	
 	@SideOnly(Side.CLIENT)
 	public void onClient(WorldClient worldClient, double x, double y, double z) {}
+	
+	@SubscribeEvent
+	public void tickTock(ServerTickEvent event) {
+		tick();
+		
+		if(p == null) {
+			return;
+		}
+		
+		if(!aviable) {
+			cooldownTick();
+		} else {
+			cooldownProgress = 100;
+			if(cooldownProgress != cooldownProgressLast) {
+				cooldownProgressLast = cooldownProgress;
+				BnHA.proxy.simpleNetworkWrapper.sendTo(new MessageCooldownProgress(cooldownProgress), p);
+			}
+		}
+		
+		if(activated) {
+			activateTick();
+		} else {
+			activeProgress = 100;
+			if(activeProgress != activeProgressLast) {
+				activeProgressLast = activeProgress;
+				BnHA.proxy.simpleNetworkWrapper.sendTo(new MessageActiveProgress(activeProgress), p);
+			}
+		}
+		
+		
+	}
+	
+	private void activateTick() {
+		if(act == 0) {
+			return;
+		}
+		
+		double tmp = (double) act/maxAct;
+		activeProgress = (int) (tmp * 100);
+
+		if(activeProgress == activeProgressLast) return;
+		
+		activeProgressLast = activeProgress;
+		
+		BnHA.proxy.simpleNetworkWrapper.sendTo(new MessageActiveProgress(activeProgress), p);
+	}
+	
+	private void cooldownTick() {
+		if(cooldown == 0) {
+			return;
+		}
+		
+		double tmp = (double) cooldown/maxCooldown;
+		cooldownProgress = (int) (tmp * 100);
+
+		if(cooldownProgress == cooldownProgressLast) return;
+		
+		cooldownProgressLast = cooldownProgress;
+		
+		BnHA.proxy.simpleNetworkWrapper.sendTo(new MessageCooldownProgress(cooldownProgress), p);
+	}
+	
+	public abstract void tick();
+	
+	public int getCooldownProgress() {
+		return cooldownProgress;
+	}
+	
+	public void setCooldownProgress(int cooldownProgress) {
+		this.cooldownProgress = cooldownProgress;
+	}
+	
+	public int getActiveProgress() {
+		return activeProgress;
+	}
+	
+	public void setActiveProgress(int activeProgress) {
+		this.activeProgress = activeProgress;
+	}
 	
 	public ResourceLocation getId() {
 		return id;
@@ -192,9 +281,9 @@ public abstract class Quirk {
 	public void setNextXP(double nextXp) {
 		this.nextXp = nextXp;
 	}
-			
-	public void update(EntityPlayerMP player) {
-		BnHA.proxy.simpleNetworkWrapper.sendToServer(new MessageChangeQuirk(this, player.getName(), true));
+	
+	public void setP(EntityPlayerMP p) {
+		this.p = p;
 	}
 	
 	protected abstract NBTTagCompound save();
@@ -218,12 +307,12 @@ public abstract class Quirk {
 		tag.setDouble("nextXp", nextXp);
 		
 		//Cooldown
-		tag.setInteger("maxCooldown", maxCooldown);
-		tag.setInteger("cooldown", cooldown);
+		tag.setInteger("maxCooldown", (int) maxCooldown);
+		tag.setInteger("cooldown", (int) cooldown);
 		
 		//Activation Time
-		tag.setInteger("maxAct", maxAct);
-		tag.setInteger("act", act);
+		tag.setInteger("maxAct", (int) maxAct);
+		tag.setInteger("act", (int) act);
 		
 		//Is type of Quirk
 		//(q.getClass().getSuperclass() == QuirkRegistry.getQuirkInstances().get(0)
@@ -282,11 +371,11 @@ public abstract class Quirk {
 		quirk.setNextXP(tag.getDouble("nextXp"));
 		
 		//Cooldown
-		quirk.setMaxCooldown(tag.getInteger("maxCooldown"));
+		quirk.setMaxCooldown(Math.max(tag.getInteger("maxCooldown"), 200));
 		quirk.setCooldown(tag.getInteger("cooldown"));
 
 		//Activation Time
-		quirk.setMaxActivatedTime(tag.getInteger("maxAct"));
+		quirk.setMaxActivatedTime(Math.max(tag.getInteger("maxAct"), 200));
 		quirk.setAct(tag.getInteger("act"));
 		
 		quirk.load(tag);

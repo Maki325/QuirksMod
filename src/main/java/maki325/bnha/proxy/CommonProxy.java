@@ -10,6 +10,12 @@ import maki325.bnha.net.playerjoin.MessageHandlerAddQuirkServer;
 import maki325.bnha.net.playerjoin.messages.MessageAddQuirk;
 import maki325.bnha.net.points.MessageChangePoints;
 import maki325.bnha.net.points.MessageHandlerChangePointsServer;
+import maki325.bnha.net.progress.active.MessageActiveProgress;
+import maki325.bnha.net.progress.active.MessageHandlerActiveProgressClient;
+import maki325.bnha.net.progress.active.MessageHandlerActiveProgressServer;
+import maki325.bnha.net.progress.cooldown.MessageCooldownProgress;
+import maki325.bnha.net.progress.cooldown.MessageHandlerCooldownProgressClient;
+import maki325.bnha.net.progress.cooldown.MessageHandlerCooldownProgressServer;
 import maki325.bnha.net.quirk.MessageHandlerActivateClientServer;
 import maki325.bnha.net.quirk.MessageHandlerActivateServer;
 import maki325.bnha.net.quirk.MessageHandlerChangeQuirkServer;
@@ -53,6 +59,9 @@ public class CommonProxy {
 
 	public static final byte CHANGE_HUD_SKILL_MESSAGE_ID = 8;
 
+	public static final byte COOLDOWN_PROGRESS_MESSAGE_ID = 9;
+	public static final byte ACTIVE_PROGRESS_MESSAGE_ID = 10;
+
 	public void registerItemRenderer(Item item, int meta, String id) {}
 	
 	public void preInit() {
@@ -79,7 +88,10 @@ public class CommonProxy {
 		
 		//HUD SKILL SYSTEM
 		simpleNetworkWrapper.registerMessage(MessageHandlerChangeHudSkillServer.class, MessageChangeHudSkill.class, CHANGE_HUD_SKILL_MESSAGE_ID, Side.SERVER);
-		
+
+		//Progress
+		simpleNetworkWrapper.registerMessage(MessageHandlerCooldownProgressServer.class, MessageCooldownProgress.class, COOLDOWN_PROGRESS_MESSAGE_ID, Side.SERVER);
+		simpleNetworkWrapper.registerMessage(MessageHandlerActiveProgressServer.class, MessageActiveProgress.class, ACTIVE_PROGRESS_MESSAGE_ID, Side.SERVER);
 		
 		MinecraftForge.EVENT_BUS.register(EventHandlerServer.class);
 

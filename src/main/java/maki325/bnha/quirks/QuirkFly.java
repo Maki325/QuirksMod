@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 
 public class QuirkFly extends Quirk {
 	
+	private LevelUp levelUp_ = new LevelUp(1.1d, 0.9d);
+	
 	public QuirkFly() {
 		super("fly", Reference.MOD_ID);
 
@@ -20,7 +22,7 @@ public class QuirkFly extends Quirk {
 		setMaxActivatedTime(200);
 		setLevelFactor(1.5);
 		setLevelMinimum(10);
-		setLevelUp(new LevelUp(1.1d, 0.9d));
+		setLevelUp(levelUp_);
 		setXpPerTick(1.5/20);
 		
 		init();
@@ -57,8 +59,8 @@ public class QuirkFly extends Quirk {
 		}
 	}
 
-	@SubscribeEvent
-	public void tick(ServerTickEvent event) {
+	@Override
+	public void tick() {
 		if(!aviable) {
 			cooldown++;
 			if(cooldown >= maxCooldown) {
@@ -74,11 +76,15 @@ public class QuirkFly extends Quirk {
 				nextXp = xp * levelFactor;
 				p.sendMessage(new TextComponentString(TextFormatting.AQUA + "Level Up"));
 				p.sendMessage(new TextComponentString(TextFormatting.AQUA + "Your now level " + level));
-				maxCooldown *= levelUp.getCooldownMultiplier();
-				maxAct *= levelUp.getActivatedMultiplier();		
+				if(levelUp.getCooldownMultiplier() != 0) {
+					maxCooldown *= levelUp.getCooldownMultiplier();
+				}
+				if(levelUp.getActivatedMultiplier() != 0 ) {
+					maxAct = maxAct * levelUp.getActivatedMultiplier();
+				}
 			}
 			if(act >= maxAct) {
-				activated = false;
+				//activated = false;
 				
 				if(!p.isCreative()) {
 					p.capabilities.allowFlying = false;

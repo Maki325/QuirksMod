@@ -5,6 +5,7 @@ import java.util.List;
 
 import maki325.bnha.commands.subcommands.SubcommandGet;
 import maki325.bnha.commands.subcommands.SubcommandPoints;
+import maki325.bnha.commands.subcommands.SubcommandRefresh;
 import maki325.bnha.commands.subcommands.SubcommandSet;
 import maki325.bnha.commands.subcommands.SubcommandSkill;
 import net.minecraft.command.CommandBase;
@@ -12,6 +13,8 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 
 public class CommandQuirk extends CommandBase {
 
@@ -22,6 +25,7 @@ public class CommandQuirk extends CommandBase {
 	private SubcommandGet get;
 	private SubcommandSkill skill;
 	private SubcommandPoints points;
+	private SubcommandRefresh refresh;
 	
 	public CommandQuirk() {
 		
@@ -29,12 +33,15 @@ public class CommandQuirk extends CommandBase {
 		get = new SubcommandGet();
 		skill = new SubcommandSkill();
 		points = new SubcommandPoints();
+		refresh = new SubcommandRefresh();
 		
 		pos1 = new ArrayList<String>();
 		pos1.add(set.getName());
 		pos1.add(get.getName());
 		pos1.add(points.getName());
 		pos1.add(skill.getName());
+		pos1.add(refresh.getName());
+		pos1.add("help");
 		
 		ret = new ArrayList<String>();
 		ret.add("quirk");
@@ -48,7 +55,7 @@ public class CommandQuirk extends CommandBase {
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return set.usage + " or " + get.usage + " or " + skill.usage + " or " + points.usage;
+		return set.usage + " or " + get.usage + " or " + skill.usage + " or " + points.usage + " or " + refresh.usage;
 	}
 	
 	@Override
@@ -74,6 +81,8 @@ public class CommandQuirk extends CommandBase {
 			return skill.getTabCompletions(server, sender, args, targetPos);
 		} else if(args[0].equalsIgnoreCase("points")) {
 			return points.getTabCompletions(server, sender, args, targetPos);
+		} else if(args[0].equalsIgnoreCase("refresh")) {
+			return refresh.getTabCompletions(server, sender, args, targetPos);
 		}
 		
 		return ret;
@@ -81,25 +90,30 @@ public class CommandQuirk extends CommandBase {
 	
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		if(args.length == 1) {
+			if(args[0].equalsIgnoreCase("refresh")) {
+				refresh.execute(server, sender, args);
+				return;
+			} else if(args[0].equalsIgnoreCase("help")) {
+				String help = "Help: \n-" + set.usage + " or \n-" + get.usage + " or \n-" + skill.usage + " or \n-" + points.usage + " or \n-" + refresh.usage;
+				sender.sendMessage(new TextComponentString(TextFormatting.GREEN + help));
+				return;
+			} else {
+				throw new CommandException("Usage: " + set.usage + " or \n" + get.usage + " or \n" + skill.usage + " or \n" + points.usage + " or \n" + refresh.usage);
+			}
+		}
+		
 		if(args.length < 2)
-			throw new CommandException("Usage: " + set.usage + " or \n" + get.usage + " or \n" + skill.usage + " or \n" + points.usage);
+			throw new CommandException("Usage: " + set.usage + " or \n" + get.usage + " or \n" + skill.usage + " or \n" + points.usage + " or \n" + refresh.usage);
 		
 		if(args[0].equalsIgnoreCase("set")) {
-			
 			set.execute(server, sender, args);
-			
 		} else if(args[0].equalsIgnoreCase("get")) {
-			
 			get.execute(server, sender, args);
-			
 		}  else if(args[0].equalsIgnoreCase("skill")) {
-			
 			skill.execute(server, sender, args);
-			
 		} else if(args[0].equalsIgnoreCase("points")) {
-			
 			points.execute(server, sender, args);
-			
 		} else {
 			throw new CommandException("Usage: " + set.usage + " or \n" + get.usage + " or \n" + skill.usage + " or \n" + points.usage);
 		}

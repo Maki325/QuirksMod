@@ -24,9 +24,8 @@ public class QuirkExplosive extends QuirkSkill {
 		init();
 	}
 	
-	@SubscribeEvent @Override
-	public void tick(ServerTickEvent event) {
-		super.tick(event);
+	@Override
+	public void tick() {
 		if(xp >= nextXp) {
 			level++;
 			nextXp = xp * levelFactor;
