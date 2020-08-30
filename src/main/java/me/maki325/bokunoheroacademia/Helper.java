@@ -5,8 +5,10 @@ import me.maki325.bokunoheroacademia.api.capabilities.quirk.QuirkProvider;
 import me.maki325.bokunoheroacademia.api.quirk.Quirk;
 import me.maki325.bokunoheroacademia.network.Networking;
 import me.maki325.bokunoheroacademia.network.packates.SyncQuirkWithClient;
+import me.maki325.bokunoheroacademia.network.packates.SyncQuirkWithServer;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkDirection;
 
@@ -20,7 +22,9 @@ public class Helper {
 
     public static void syncQuirkWithClient(@Nonnull Quirk q, @Nonnull ServerPlayerEntity serverPlayerEntity, boolean back) {
         CompoundNBT data = new CompoundNBT();
-        data.put("quirkData", q.save());
+        INBT nbt = q.save();
+        if(nbt == null) nbt = new CompoundNBT();
+        data.put("quirkData", nbt);
         data.putString("quirkName", q.getId().toString());
 
         serverPlayerEntity.getServerWorld().getPlayers().forEach(player -> {
@@ -34,13 +38,25 @@ public class Helper {
 
                 CompoundNBT d = new CompoundNBT();
                 Quirk quirk = iquirk.getQuirks().get(0);
-                d.put("quirkData", quirk.save());
+                CompoundNBT out = quirk.save();
+                if(out == null) out = new CompoundNBT();
+                d.put("quirkData", out);
                 d.putString("quirkName", quirk.getId().toString());
 
                 Networking.INSTANCE.sendTo(new SyncQuirkWithClient(player.getUniqueID(), d), serverPlayerEntity.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
             }
         });
         Networking.INSTANCE.sendTo(new SyncQuirkWithClient(serverPlayerEntity.getUniqueID(), data, true), serverPlayerEntity.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+    }
+
+    public static void syncQuirkWithServer(@Nonnull Quirk q) {
+        CompoundNBT data = new CompoundNBT();
+        INBT nbt = q.save();
+        if(nbt == null) nbt = new CompoundNBT();
+        data.put("quirkData", nbt);
+        data.putString("quirkName", q.getId().toString());
+
+        Networking.INSTANCE.sendToServer(new SyncQuirkWithServer(data));
     }
 
 }

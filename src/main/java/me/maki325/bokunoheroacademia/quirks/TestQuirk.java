@@ -3,11 +3,14 @@ package me.maki325.bokunoheroacademia.quirks;
 import me.maki325.bokunoheroacademia.BnHA;
 import me.maki325.bokunoheroacademia.api.quirk.Quirk;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class TestQuirk extends Quirk {
 
@@ -17,9 +20,10 @@ public class TestQuirk extends Quirk {
         super(ID);
     }
 
-    @Override
-    public void onPlayerJoin(PlayerEntity player) {
-        player.sendMessage(new StringTextComponent("onPlayerJoin!!!"), player.getUniqueID());
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    @SubscribeEvent
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        event.getPlayer().sendMessage(new StringTextComponent("Test Quirk"), event.getPlayer().getUniqueID());
     }
 
     @Override

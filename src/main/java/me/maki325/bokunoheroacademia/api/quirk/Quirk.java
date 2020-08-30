@@ -1,12 +1,9 @@
 package me.maki325.bokunoheroacademia.api.quirk;
 
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nonnull;
 
 public abstract class Quirk {
 
@@ -23,9 +20,7 @@ public abstract class Quirk {
     public abstract void onUse(ServerPlayerEntity player);
     public abstract void onUse(ClientPlayerEntity player);
 
-    public void onPlayerJoin(PlayerEntity player) {}
-
-    @Nonnull public abstract CompoundNBT save();
-    public abstract void load(@Nonnull CompoundNBT in);
+    public CompoundNBT save() { return new CompoundNBT(); }
+    public void load(CompoundNBT in) {}
 
 }

@@ -65,7 +65,8 @@ public class SyncQuirkWithClient {
             return;
         }
         q.load(data.getCompound("quirkData"));
-        iq.addQuirks(q);
+        // TODO: Do I need this?
+        // iq.addQuirks(q);
 
         player.sendMessage(new StringTextComponent("SUCCESSFULL"), player.getUniqueID());
     }
@@ -85,7 +86,8 @@ public class SyncQuirkWithClient {
             }
         }
         q.load(data.getCompound("quirkData"));
-        iq.addQuirks(q);
+        // TODO: Do I need this?
+        // iq.addQuirks(q);
 
         player.sendMessage(new StringTextComponent("SUCCESSFULL"), player.getUniqueID());
     }

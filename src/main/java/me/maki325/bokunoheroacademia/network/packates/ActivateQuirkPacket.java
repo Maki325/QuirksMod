@@ -5,7 +5,6 @@ import me.maki325.bokunoheroacademia.api.capabilities.quirk.QuirkProvider;
 import me.maki325.bokunoheroacademia.api.quirk.Quirk;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkEvent;
 

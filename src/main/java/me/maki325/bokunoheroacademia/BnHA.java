@@ -1,8 +1,8 @@
 package me.maki325.bokunoheroacademia;
 
-import me.maki325.bokunoheroacademia.setup.*;
+import me.maki325.bokunoheroacademia.setup.ClientSetup;
+import me.maki325.bokunoheroacademia.setup.ModSetup;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;

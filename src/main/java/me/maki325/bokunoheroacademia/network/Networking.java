@@ -3,6 +3,7 @@ package me.maki325.bokunoheroacademia.network;
 import me.maki325.bokunoheroacademia.BnHA;
 import me.maki325.bokunoheroacademia.network.packates.ActivateQuirkPacket;
 import me.maki325.bokunoheroacademia.network.packates.SyncQuirkWithClient;
+import me.maki325.bokunoheroacademia.network.packates.SyncQuirkWithServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -37,6 +38,13 @@ public class Networking {
                 SyncQuirkWithClient::toBytes,
                 SyncQuirkWithClient::new,
                 SyncQuirkWithClient::handle
+        );
+        INSTANCE.registerMessage(
+                nextID(),
+                SyncQuirkWithServer.class,
+                SyncQuirkWithServer::toBytes,
+                SyncQuirkWithServer::new,
+                SyncQuirkWithServer::handle
         );
 
     }
