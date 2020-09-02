@@ -1,0 +1,16 @@
+[
+{
+  "modid": "bokunoheroacademia",
+  "name": "My Hero Academia",
+  "description": "My Hero Academia Mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Maki325"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

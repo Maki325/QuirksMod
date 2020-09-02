@@ -1,8 +1,8 @@
 package me.maki325.bokunoheroacademia.api.quirk;
 
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class Quirk {
@@ -17,10 +17,10 @@ public abstract class Quirk {
         return id;
     }
 
-    public abstract void onUse(ServerPlayerEntity player);
-    public abstract void onUse(ClientPlayerEntity player);
+    public abstract void onUse(EntityPlayerMP player);
+    public abstract void onUse(EntityPlayerSP player);
 
-    public CompoundNBT save() { return new CompoundNBT(); }
-    public void load(CompoundNBT in) {}
+    public NBTTagCompound save() { return new NBTTagCompound(); }
+    public void load(NBTTagCompound in) {}
 
 }

@@ -3,18 +3,18 @@ package me.maki325.bokunoheroacademia.quirks;
 import me.maki325.bokunoheroacademia.BnHA;
 import me.maki325.bokunoheroacademia.Helper;
 import me.maki325.bokunoheroacademia.api.quirk.Quirk;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.event.entity.living.PotionEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class InvisibilityQuirk extends Quirk {
 
@@ -22,48 +22,48 @@ public class InvisibilityQuirk extends Quirk {
 
     public boolean active = false;
 
+    private static final Potion INVISIBILITY = Potion.getPotionFromResourceLocation("invisibility");
+
     public InvisibilityQuirk() {
         super(ID);
     }
 
-    @Override public void onUse(ServerPlayerEntity player) {
+    @Override public void onUse(EntityPlayerMP player) {
         if(active) {
             active = false;
-            player.removePotionEffect(Effects.INVISIBILITY);
-            player.sendMessage(new StringTextComponent("Invisibility turned off!"), player.getUniqueID());
+            player.removePotionEffect(INVISIBILITY);
+            player.sendMessage(new TextComponentString("Invisibility turned off!"));
         } else {
             active = true;
-            player.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 99999, 0, false, false));
-            player.sendMessage(new StringTextComponent("Invisibility turned on!"), player.getUniqueID());
+            player.addPotionEffect(new PotionEffect(INVISIBILITY, 99999, 0, false, false));
+            player.sendMessage(new TextComponentString("Invisibility turned on!"));
         }
         player.sendPlayerAbilities();
         Helper.syncQuirkWithClient(this, player, true);
     }
 
-    @Override public void onUse(ClientPlayerEntity player) {}
+    @Override public void onUse(EntityPlayerSP player) {}
 
-    @Override public CompoundNBT save() {
-        CompoundNBT out = new CompoundNBT();
-        System.out.println("out.putBoolean(\"active\", active): " + String.valueOf(active));
-        out.putBoolean("active", active);
+    @Override public NBTTagCompound save() {
+        NBTTagCompound out = new NBTTagCompound();
+        out.setBoolean("active", active);
         return out;
     }
 
-    @Override public void load(CompoundNBT in) {
-        System.out.println("in.getBoolean(\"active\"): " + String.valueOf(in.getBoolean("active")));
+    @Override public void load(NBTTagCompound in) {
         active = in.getBoolean("active");
     }
 
     @SubscribeEvent
     public void onPotionRemove(PotionEvent.PotionRemoveEvent event) {
-        if(event.getPotion().equals(Effects.INVISIBILITY) && active)
+        if(event.getPotion().equals(INVISIBILITY) && active)
             event.setCanceled(true);
     }
 
-    @OnlyIn(Dist.DEDICATED_SERVER)
+    @SideOnly(Side.SERVER)
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        event.getPlayer().sendMessage(new StringTextComponent("Invisibility Quirk"), event.getPlayer().getUniqueID());
+        event.player.sendMessage(new TextComponentString("Invisibility Quirk"));
     }
 
 }

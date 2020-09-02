@@ -2,15 +2,15 @@ package me.maki325.bokunoheroacademia.quirks;
 
 import me.maki325.bokunoheroacademia.BnHA;
 import me.maki325.bokunoheroacademia.api.quirk.Quirk;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TestQuirk extends Quirk {
 
@@ -20,28 +20,28 @@ public class TestQuirk extends Quirk {
         super(ID);
     }
 
-    @OnlyIn(Dist.DEDICATED_SERVER)
+    @SideOnly(Side.SERVER)
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        event.getPlayer().sendMessage(new StringTextComponent("Test Quirk"), event.getPlayer().getUniqueID());
+        event.player.sendMessage(new TextComponentString("Test Quirk"));
     }
 
     @Override
-    public void onUse(ServerPlayerEntity player) {
-        player.sendMessage(new StringTextComponent("Server Side!!!"), player.getUniqueID());
+    public void onUse(EntityPlayerMP player) {
+        player.sendMessage(new TextComponentString("Server Side!!!"));
     }
 
     @Override
-    public void onUse(ClientPlayerEntity player) {
+    public void onUse(EntityPlayerSP player) {
         player.sendChatMessage("Client Side!!!");
     }
 
     @Override
-    public CompoundNBT save() {
-        return new CompoundNBT();
+    public NBTTagCompound save() {
+        return new NBTTagCompound();
     }
 
     @Override
-    public void load(CompoundNBT in) {}
+    public void load(NBTTagCompound in) {}
 
 }

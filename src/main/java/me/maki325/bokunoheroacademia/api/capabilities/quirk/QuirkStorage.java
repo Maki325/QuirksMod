@@ -2,47 +2,39 @@ package me.maki325.bokunoheroacademia.api.capabilities.quirk;
 
 import me.maki325.bokunoheroacademia.api.quirk.Quirk;
 import me.maki325.bokunoheroacademia.api.quirk.QuirkRegistry;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-
-import javax.annotation.Nullable;
 
 public class QuirkStorage implements Capability.IStorage<IQuirk> {
 
-    @Nullable
     @Override
-    public INBT writeNBT(Capability<IQuirk> capability, IQuirk instance, Direction side) {
-        CompoundNBT tag = new CompoundNBT();
-
-        System.out.println("!!!writeNBT!!!");
+    public NBTBase writeNBT(Capability<IQuirk> capability, IQuirk instance, EnumFacing side) {
+        NBTTagCompound tag = new NBTTagCompound();
 
         int i = 0;
         for(Quirk q : instance.getQuirks()) {
             if(q == null) continue;
-            CompoundNBT nbt = q.save();
-            if(nbt == null) nbt = new CompoundNBT();
-            nbt.putString("id", q.getId().toString());
-            tag.put(String.valueOf(i), nbt);
+            NBTTagCompound nbt = q.save();
+            if(nbt == null) nbt = new NBTTagCompound();
+            nbt.setString("id", q.getId().toString());
+            tag.setTag(String.valueOf(i), nbt);
             i++;
         }
-        tag.putInt("numberOfQuirks", i);
+        tag.setInteger("numberOfQuirks", i);
 
         return tag;
     }
 
     @Override
-    public void readNBT(Capability<IQuirk> capability, IQuirk instance, Direction side, INBT nbt) {
+    public void readNBT(Capability<IQuirk> capability, IQuirk instance, EnumFacing side, NBTBase nbt) {
+        NBTTagCompound tag = (NBTTagCompound) nbt;
 
-        System.out.println("!!!readNBT!!!");
-
-        CompoundNBT tag = (CompoundNBT) nbt;
-
-        int numOfQ = tag.getInt("numberOfQuirks");
+        int numOfQ = tag.getInteger("numberOfQuirks");
 
         for(int i = 0;i < numOfQ;i++) {
-            Quirk quirk = QuirkRegistry.get(tag.getCompound(String.valueOf(i)));
+            Quirk quirk = QuirkRegistry.get((NBTTagCompound) tag.getTag(String.valueOf(i)));
             if(quirk != null) instance.addQuirks(quirk);
         }
     }

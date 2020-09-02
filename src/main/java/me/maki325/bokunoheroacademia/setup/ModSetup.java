@@ -1,6 +1,5 @@
 package me.maki325.bokunoheroacademia.setup;
 
-import me.maki325.bokunoheroacademia.BnHA;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.CapabilityHandler;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.CapabilityQuirk;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.IQuirk;
@@ -13,13 +12,10 @@ import me.maki325.bokunoheroacademia.quirks.TestQuirk;
 import me.maki325.bokunoheroacademia.quirks.ZoomQuirk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@Mod.EventBusSubscriber(modid = BnHA.MODID)
 public class ModSetup {
 
-    public static void init(final FMLCommonSetupEvent event) {
+    public static void init() {
         CapabilityManager.INSTANCE.register(IQuirk.class, new QuirkStorage(), () -> new CapabilityQuirk());
         MinecraftForge.EVENT_BUS.register(CapabilityHandler.class);
         MinecraftForge.EVENT_BUS.register(PlayerEventHandler.class);

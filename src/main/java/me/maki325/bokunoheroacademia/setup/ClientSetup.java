@@ -1,40 +1,35 @@
 package me.maki325.bokunoheroacademia.setup;
 
-import me.maki325.bokunoheroacademia.BnHA;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.IQuirk;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.QuirkProvider;
 import me.maki325.bokunoheroacademia.api.quirk.Quirk;
 import me.maki325.bokunoheroacademia.network.Networking;
 import me.maki325.bokunoheroacademia.network.packates.ActivateQuirkPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod.EventBusSubscriber(modid = BnHA.MODID)
-public class ClientSetup {
+public class ClientSetup extends CommonProxy {
 
-    public static void init(final FMLClientSetupEvent event) {
+    @Override
+    public void init() {
         MinecraftForge.EVENT_BUS.register(ClientSetup.class);
 
         KeyBindings.init();
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void onKeyInput(TickEvent.ClientTickEvent event) {
         if(KeyBindings.activate.isPressed()) {
-            LazyOptional<IQuirk> lazyOptionalClient = Minecraft.getInstance().player.getCapability(QuirkProvider.QUIRK_CAP);
-            IQuirk iquirkClient = lazyOptionalClient.orElse(null);
+            IQuirk iquirkClient = Minecraft.getMinecraft().player.getCapability(QuirkProvider.QUIRK_CAP, null);
             if(iquirkClient != null && !iquirkClient.getQuirks().isEmpty()) {
                 Quirk quirkClient = iquirkClient.getQuirks().get(0);
                 if (quirkClient != null) {
-                    quirkClient.onUse(Minecraft.getInstance().player);
+                    quirkClient.onUse(Minecraft.getMinecraft().player);
                 }
             }
 

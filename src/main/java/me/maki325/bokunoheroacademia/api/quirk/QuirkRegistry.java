@@ -1,6 +1,6 @@
 package me.maki325.bokunoheroacademia.api.quirk;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class QuirkRegistry {
         return QUIRKS.get(new ResourceLocation(id)).get();
     }
 
-    public static Quirk get(CompoundNBT in) {
+    public static Quirk get(NBTTagCompound in) {
         ResourceLocation id = new ResourceLocation(in.getString("id"));
         Quirk quirk = QUIRKS.get(id).get();
         if(quirk == null) return null;

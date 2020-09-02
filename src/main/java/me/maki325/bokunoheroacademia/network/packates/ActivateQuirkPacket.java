@@ -1,35 +1,37 @@
 package me.maki325.bokunoheroacademia.network.packates;
 
+import io.netty.buffer.ByteBuf;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.IQuirk;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.QuirkProvider;
 import me.maki325.bokunoheroacademia.api.quirk.Quirk;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-import java.util.function.Supplier;
+public class ActivateQuirkPacket implements IMessage {
 
-public class ActivateQuirkPacket {
-
-    public ActivateQuirkPacket(PacketBuffer buf) {}
     public ActivateQuirkPacket() {}
 
     public void toBytes(PacketBuffer buf) {}
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayerEntity player = ctx.get().getSender();
+    @Override public void fromBytes(ByteBuf buf) {}
+
+    @Override public void toBytes(ByteBuf buf) {}
+
+    public static IMessage handle(ActivateQuirkPacket message, MessageContext ctx) {
+        ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
+            EntityPlayerMP player = ctx.getServerHandler().player;
             if(player == null) return;
 
-            LazyOptional<IQuirk> lazyOptional = player.getCapability(QuirkProvider.QUIRK_CAP);
-            IQuirk iquirk = lazyOptional.orElse(null);
+            IQuirk iquirk = player.getCapability(QuirkProvider.QUIRK_CAP, null);
             if(iquirk == null || iquirk.getQuirks().isEmpty()) return;
             Quirk q = iquirk.getQuirks().get(0);
             if(q == null) return;
             q.onUse(player);
         });
-        ctx.get().setPacketHandled(true);
+
+        return null;
     }
 
 }
