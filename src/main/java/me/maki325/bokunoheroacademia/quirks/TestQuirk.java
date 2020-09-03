@@ -31,8 +31,8 @@ public class TestQuirk extends Quirk {
         player.sendMessage(new StringTextComponent("Server Side!!!"), player.getUniqueID());
     }
 
-    @Override
-    public void onUse(ClientPlayerEntity player) {
+    @OnlyIn(Dist.CLIENT)
+    @Override public void onUse(ClientPlayerEntity player) {
         player.sendChatMessage("Client Side!!!");
     }
 

@@ -25,6 +25,7 @@ public class Helper {
         INBT nbt = q.save();
         if(nbt == null) nbt = new CompoundNBT();
         data.put("quirkData", nbt);
+        data.putBoolean("erased", q.isErased());
         data.putString("quirkName", q.getId().toString());
 
         serverPlayerEntity.getServerWorld().getPlayers().forEach(player -> {
@@ -41,6 +42,7 @@ public class Helper {
                 CompoundNBT out = quirk.save();
                 if(out == null) out = new CompoundNBT();
                 d.put("quirkData", out);
+                d.putBoolean("erased", quirk.isErased());
                 d.putString("quirkName", quirk.getId().toString());
 
                 Networking.INSTANCE.sendTo(new SyncQuirkWithClient(player.getUniqueID(), d), serverPlayerEntity.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
@@ -55,6 +57,7 @@ public class Helper {
         if(nbt == null) nbt = new CompoundNBT();
         data.put("quirkData", nbt);
         data.putString("quirkName", q.getId().toString());
+        data.putBoolean("erased", q.isErased());
 
         Networking.INSTANCE.sendToServer(new SyncQuirkWithServer(data));
     }

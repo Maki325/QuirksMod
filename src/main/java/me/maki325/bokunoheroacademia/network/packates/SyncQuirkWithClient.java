@@ -59,14 +59,17 @@ public class SyncQuirkWithClient {
         IQuirk iq = lo.orElse(null);
         if(iq == null) return;
 
-        Quirk q = QuirkRegistry.get(data.getString("quirkName"));
+        Quirk q = iq.getQuirk(new ResourceLocation(data.getString("quirkName")));
         if(q == null) {
-            player.sendMessage(new StringTextComponent("No quirk with name " + data.getString("quirkName")), player.getUniqueID());
-            return;
+            q = QuirkRegistry.get(data.getString("quirkName"));
+            if(q == null) {
+                player.sendMessage(new StringTextComponent("No quirk with name " + data.getString("quirkName")), player.getUniqueID());
+                return;
+            }
+            iq.addQuirks(q);
         }
+        q.setErased(data.getBoolean("erased"));
         q.load(data.getCompound("quirkData"));
-        // TODO: Do I need this?
-        // iq.addQuirks(q);
 
         player.sendMessage(new StringTextComponent("SUCCESSFULL"), player.getUniqueID());
     }
@@ -84,7 +87,9 @@ public class SyncQuirkWithClient {
                 player.sendMessage(new StringTextComponent("No quirk with name " + data.getString("quirkName")), player.getUniqueID());
                 return;
             }
+            iq.addQuirks(q);
         }
+        q.setErased(data.getBoolean("erased"));
         q.load(data.getCompound("quirkData"));
         // TODO: Do I need this?
         // iq.addQuirks(q);

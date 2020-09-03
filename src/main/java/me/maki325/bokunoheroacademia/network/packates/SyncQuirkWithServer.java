@@ -47,6 +47,7 @@ public class SyncQuirkWithServer {
                     return;
                 }
             }
+            q.setErased(data.getBoolean("erased"));
             q.load(data.getCompound("quirkData"));
             // TODO: Do I need this?
             // iq.addQuirks(q);

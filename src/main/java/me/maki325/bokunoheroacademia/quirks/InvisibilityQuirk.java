@@ -40,17 +40,16 @@ public class InvisibilityQuirk extends Quirk {
         Helper.syncQuirkWithClient(this, player, true);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override public void onUse(ClientPlayerEntity player) {}
 
     @Override public CompoundNBT save() {
         CompoundNBT out = new CompoundNBT();
-        System.out.println("out.putBoolean(\"active\", active): " + String.valueOf(active));
         out.putBoolean("active", active);
         return out;
     }
 
     @Override public void load(CompoundNBT in) {
-        System.out.println("in.getBoolean(\"active\"): " + String.valueOf(in.getBoolean("active")));
         active = in.getBoolean("active");
     }
 

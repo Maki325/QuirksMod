@@ -26,7 +26,7 @@ public class ActivateQuirkPacket {
             IQuirk iquirk = lazyOptional.orElse(null);
             if(iquirk == null || iquirk.getQuirks().isEmpty()) return;
             Quirk q = iquirk.getQuirks().get(0);
-            if(q == null) return;
+            if(q == null || q.isErased()) return;
             q.onUse(player);
         });
         ctx.get().setPacketHandled(true);

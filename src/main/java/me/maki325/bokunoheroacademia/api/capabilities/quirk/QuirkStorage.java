@@ -16,8 +16,6 @@ public class QuirkStorage implements Capability.IStorage<IQuirk> {
     public INBT writeNBT(Capability<IQuirk> capability, IQuirk instance, Direction side) {
         CompoundNBT tag = new CompoundNBT();
 
-        System.out.println("!!!writeNBT!!!");
-
         int i = 0;
         for(Quirk q : instance.getQuirks()) {
             if(q == null) continue;
@@ -34,9 +32,6 @@ public class QuirkStorage implements Capability.IStorage<IQuirk> {
 
     @Override
     public void readNBT(Capability<IQuirk> capability, IQuirk instance, Direction side, INBT nbt) {
-
-        System.out.println("!!!readNBT!!!");
-
         CompoundNBT tag = (CompoundNBT) nbt;
 
         int numOfQ = tag.getInt("numberOfQuirks");

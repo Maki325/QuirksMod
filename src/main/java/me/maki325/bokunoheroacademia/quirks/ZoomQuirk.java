@@ -26,6 +26,7 @@ public class ZoomQuirk extends Quirk {
 
     @Override public void onUse(ServerPlayerEntity player) {}
 
+    @OnlyIn(Dist.CLIENT)
     @Override public void onUse(ClientPlayerEntity player) {}
 
     @Override public void load(CompoundNBT in) {
@@ -43,6 +44,7 @@ public class ZoomQuirk extends Quirk {
         event.setNewfov(zoom);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent public void tick(TickEvent.ClientTickEvent event) {
         if(KeyBindings.zoomIn.isPressed() && zoom > 0.01) {
             zoom -= .01;

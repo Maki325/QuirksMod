@@ -4,10 +4,14 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class Quirk {
 
     public final ResourceLocation id;
+
+    private boolean erased = false;
 
     public Quirk(ResourceLocation id) {
         this.id = id;
@@ -18,9 +22,17 @@ public abstract class Quirk {
     }
 
     public abstract void onUse(ServerPlayerEntity player);
+    @OnlyIn(Dist.CLIENT)
     public abstract void onUse(ClientPlayerEntity player);
 
     public CompoundNBT save() { return new CompoundNBT(); }
     public void load(CompoundNBT in) {}
 
+    public boolean isErased() {
+        return erased;
+    }
+
+    public void setErased(boolean erased) {
+        this.erased = erased;
+    }
 }

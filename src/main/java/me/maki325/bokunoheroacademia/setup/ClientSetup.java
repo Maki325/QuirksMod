@@ -33,7 +33,7 @@ public class ClientSetup {
             IQuirk iquirkClient = lazyOptionalClient.orElse(null);
             if(iquirkClient != null && !iquirkClient.getQuirks().isEmpty()) {
                 Quirk quirkClient = iquirkClient.getQuirks().get(0);
-                if (quirkClient != null) {
+                if (quirkClient != null || quirkClient.isErased()) {
                     quirkClient.onUse(Minecraft.getInstance().player);
                 }
             }
