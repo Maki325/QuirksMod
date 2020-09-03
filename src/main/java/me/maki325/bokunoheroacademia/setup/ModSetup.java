@@ -7,6 +7,7 @@ import me.maki325.bokunoheroacademia.api.capabilities.quirk.QuirkStorage;
 import me.maki325.bokunoheroacademia.api.quirk.QuirkRegistry;
 import me.maki325.bokunoheroacademia.handlers.PlayerEventHandler;
 import me.maki325.bokunoheroacademia.network.Networking;
+import me.maki325.bokunoheroacademia.quirks.EraserQuirk;
 import me.maki325.bokunoheroacademia.quirks.InvisibilityQuirk;
 import me.maki325.bokunoheroacademia.quirks.TestQuirk;
 import me.maki325.bokunoheroacademia.quirks.ZoomQuirk;
@@ -23,6 +24,7 @@ public class ModSetup {
         QuirkRegistry.addQuirk(TestQuirk.ID, () -> new TestQuirk());
         QuirkRegistry.addQuirk(InvisibilityQuirk.ID, () -> new InvisibilityQuirk());
         QuirkRegistry.addQuirk(ZoomQuirk.ID, () -> new ZoomQuirk());
+        QuirkRegistry.addQuirk(EraserQuirk.ID, () -> new EraserQuirk());
 
         Networking.registerMessages();
     }

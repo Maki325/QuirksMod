@@ -27,7 +27,7 @@ public class ActivateQuirkPacket implements IMessage {
             IQuirk iquirk = player.getCapability(QuirkProvider.QUIRK_CAP, null);
             if(iquirk == null || iquirk.getQuirks().isEmpty()) return;
             Quirk q = iquirk.getQuirks().get(0);
-            if(q == null) return;
+            if(q == null || q.isErased()) return;
             q.onUse(player);
         });
 

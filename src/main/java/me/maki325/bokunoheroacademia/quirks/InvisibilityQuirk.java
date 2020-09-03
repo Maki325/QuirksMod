@@ -42,6 +42,7 @@ public class InvisibilityQuirk extends Quirk {
         Helper.syncQuirkWithClient(this, player, true);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override public void onUse(EntityPlayerSP player) {}
 
     @Override public NBTTagCompound save() {

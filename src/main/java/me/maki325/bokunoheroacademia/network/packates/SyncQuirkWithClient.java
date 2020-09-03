@@ -72,11 +72,16 @@ public class SyncQuirkWithClient implements IMessage {
         IQuirk iq = player.getCapability(QuirkProvider.QUIRK_CAP, null);
         if(iq == null) return;
 
-        Quirk q = QuirkRegistry.get(message.data.getString("quirkName"));
+        Quirk q = iq.getQuirk(new ResourceLocation(message.data.getString("quirkName")));
         if(q == null) {
-            player.sendChatMessage("No quirk with name " + message.data.getString("quirkName"));
-            return;
+            q = QuirkRegistry.get(message.data.getString("quirkName"));
+            if(q == null) {
+                player.sendChatMessage("No quirk with name " + message.data.getString("quirkName"));
+                return;
+            }
+            iq.addQuirks(q);
         }
+        q.setErased(message.data.getBoolean("erased"));
         q.load(message.data.getCompoundTag("quirkData"));
         // TODO: Do I need this?
         // iq.addQuirks(q);
@@ -96,7 +101,9 @@ public class SyncQuirkWithClient implements IMessage {
                 player.sendChatMessage("No quirk with name " + message.data.getString("quirkName"));
                 return;
             }
+            iq.addQuirks(q);
         }
+        q.setErased(message.data.getBoolean("erased"));
         q.load(message.data.getCompoundTag("quirkData"));
         // TODO: Do I need this?
         // iq.addQuirks(q);

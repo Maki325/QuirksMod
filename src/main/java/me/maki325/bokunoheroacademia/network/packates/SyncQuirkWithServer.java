@@ -8,7 +8,6 @@ import me.maki325.bokunoheroacademia.api.quirk.Quirk;
 import me.maki325.bokunoheroacademia.api.quirk.QuirkRegistry;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -51,6 +50,7 @@ public class SyncQuirkWithServer implements IMessage {
                     return;
                 }
             }
+            q.setErased(message.data.getBoolean("erased"));
             q.load(message.data.getCompoundTag("quirkData"));
             // TODO: Do I need this?
             // iq.addQuirks(q);

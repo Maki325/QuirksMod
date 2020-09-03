@@ -28,7 +28,7 @@ public class ClientSetup extends CommonProxy {
             IQuirk iquirkClient = Minecraft.getMinecraft().player.getCapability(QuirkProvider.QUIRK_CAP, null);
             if(iquirkClient != null && !iquirkClient.getQuirks().isEmpty()) {
                 Quirk quirkClient = iquirkClient.getQuirks().get(0);
-                if (quirkClient != null) {
+                if (quirkClient != null || quirkClient.isErased()) {
                     quirkClient.onUse(Minecraft.getMinecraft().player);
                 }
             }

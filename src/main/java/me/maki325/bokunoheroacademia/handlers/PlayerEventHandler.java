@@ -4,8 +4,7 @@ import me.maki325.bokunoheroacademia.Helper;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.IQuirk;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.QuirkProvider;
 import me.maki325.bokunoheroacademia.api.quirk.Quirk;
-import me.maki325.bokunoheroacademia.quirks.InvisibilityQuirk;
-import me.maki325.bokunoheroacademia.quirks.ZoomQuirk;
+import me.maki325.bokunoheroacademia.quirks.EraserQuirk;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,7 +21,7 @@ public class PlayerEventHandler {
 
         //if(!iquirk.getQuirks().isEmpty() && !(iquirk.getQuirk(0) instanceof ZoomQuirk)) iquirk.getQuirks().clear();
         if(iquirk.getQuirks().isEmpty() || iquirk.getQuirks().get(0) == null) {
-            iquirk.addQuirks(new InvisibilityQuirk());
+            iquirk.addQuirks(new EraserQuirk());
             player.sendMessage(new TextComponentString("NEW"));
         }
         Quirk quirk = iquirk.getQuirks().get(0);
@@ -34,7 +33,7 @@ public class PlayerEventHandler {
         EntityPlayerMP player = (EntityPlayerMP) event.player;
         IQuirk iquirk = player.getCapability(QuirkProvider.QUIRK_CAP, null);
         if(iquirk == null) return;
-        if(iquirk.getQuirks() == null) return;
+        if(iquirk.getQuirks() == null || iquirk.getQuirks().get(0) == null) return;
         Quirk quirk = iquirk.getQuirks().get(0);
         MinecraftForge.EVENT_BUS.unregister(quirk);
         Helper.syncQuirkWithClient(quirk, player, true);

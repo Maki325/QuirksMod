@@ -26,6 +26,7 @@ public class ZoomQuirk extends Quirk {
 
     @Override public void onUse(EntityPlayerMP player) {}
 
+    @SideOnly(Side.CLIENT)
     @Override public void onUse(EntityPlayerSP player) {}
 
     @Override public void load(NBTTagCompound in) {
@@ -44,6 +45,7 @@ public class ZoomQuirk extends Quirk {
         event.setNewfov(zoom);
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent public void tick(TickEvent.ClientTickEvent event) {
         if(KeyBindings.zoomIn.isPressed() && zoom > 0.01) {
             zoom -= .01;

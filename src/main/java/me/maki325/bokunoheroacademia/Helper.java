@@ -22,6 +22,7 @@ public class Helper {
         NBTTagCompound nbt = q.save();
         if(nbt == null) nbt = new NBTTagCompound();
         data.setTag("quirkData", nbt);
+        data.setBoolean("erased", q.isErased());
         data.setString("quirkName", q.getId().toString());
 
         serverPlayerEntity.getServerWorld().playerEntities.forEach(player -> {
@@ -37,6 +38,7 @@ public class Helper {
                 NBTTagCompound out = quirk.save();
                 if(out == null) out = new NBTTagCompound();
                 d.setTag("quirkData", out);
+                d.setBoolean("erased", quirk.isErased());
                 d.setString("quirkName", quirk.getId().toString());
 
                 Networking.INSTANCE.sendTo(new SyncQuirkWithClient(player.getUniqueID(), d), serverPlayerEntity);
@@ -50,6 +52,7 @@ public class Helper {
         NBTTagCompound nbt = q.save();
         if(nbt == null) nbt = new NBTTagCompound();
         data.setTag("quirkData", nbt);
+        data.setBoolean("erased", q.isErased());
         data.setString("quirkName", q.getId().toString());
 
         Networking.INSTANCE.sendToServer(new SyncQuirkWithServer(data));
