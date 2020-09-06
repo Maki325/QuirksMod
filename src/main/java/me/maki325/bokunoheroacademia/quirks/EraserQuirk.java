@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 
 public class EraserQuirk extends Quirk {
 
-    public static final ResourceLocation ID = new ResourceLocation(BnHA.MODID, "ereaser");
+    public static final ResourceLocation ID = new ResourceLocation(BnHA.MODID, "eraser");
 
     public int distance = 20;
 
