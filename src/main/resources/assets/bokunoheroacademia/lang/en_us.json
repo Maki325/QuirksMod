@@ -2,5 +2,9 @@
   "key.categories.bokunoheroacademia": "My Hero Academia",
   "key.activate": "Activate Quirk",
   "key.zoomIn": "Zoom In",
-  "key.zoomOut": "Zoom Out"
+  "key.zoomOut": "Zoom Out",
+  "quirk.bokunoheroacademia.invisibility": "Invisibility",
+  "quirk.bokunoheroacademia.test": "Test",
+  "quirk.bokunoheroacademia.zoom": "Zoom",
+  "quirk.bokunoheroacademia.eraser": "Eraser"
 }

@@ -66,12 +66,11 @@ public class SyncQuirkWithClient {
                 player.sendMessage(new StringTextComponent("No quirk with name " + data.getString("quirkName")), player.getUniqueID());
                 return;
             }
+            iq.clear();
             iq.addQuirks(q);
         }
         q.setErased(data.getBoolean("erased"));
         q.load(data.getCompound("quirkData"));
-
-        player.sendMessage(new StringTextComponent("SUCCESSFULL"), player.getUniqueID());
     }
 
     private void handleOtherPlayer() {
@@ -87,14 +86,13 @@ public class SyncQuirkWithClient {
                 player.sendMessage(new StringTextComponent("No quirk with name " + data.getString("quirkName")), player.getUniqueID());
                 return;
             }
+            iq.clear();
             iq.addQuirks(q);
         }
         q.setErased(data.getBoolean("erased"));
         q.load(data.getCompound("quirkData"));
         // TODO: Do I need this?
         // iq.addQuirks(q);
-
-        player.sendMessage(new StringTextComponent("SUCCESSFULL"), player.getUniqueID());
     }
 
 }

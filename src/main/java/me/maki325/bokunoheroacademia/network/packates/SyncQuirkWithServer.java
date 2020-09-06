@@ -53,8 +53,6 @@ public class SyncQuirkWithServer {
             // iq.addQuirks(q);
 
             Helper.syncQuirkWithClient(q, player, true);
-
-            player.sendMessage(new StringTextComponent("SUCCESSFULL"), player.getUniqueID());
         });
         ctx.get().setPacketHandled(true);
     }

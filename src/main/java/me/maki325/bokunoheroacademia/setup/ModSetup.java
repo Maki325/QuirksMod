@@ -5,6 +5,7 @@ import me.maki325.bokunoheroacademia.api.capabilities.quirk.CapabilityHandler;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.CapabilityQuirk;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.IQuirk;
 import me.maki325.bokunoheroacademia.api.capabilities.quirk.QuirkStorage;
+import me.maki325.bokunoheroacademia.api.commands.BnHACommands;
 import me.maki325.bokunoheroacademia.api.quirk.QuirkRegistry;
 import me.maki325.bokunoheroacademia.handlers.PlayerEventHandler;
 import me.maki325.bokunoheroacademia.network.Networking;
@@ -14,10 +15,12 @@ import me.maki325.bokunoheroacademia.quirks.TestQuirk;
 import me.maki325.bokunoheroacademia.quirks.ZoomQuirk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
-@Mod.EventBusSubscriber(modid = BnHA.MODID)
+@Mod.EventBusSubscriber(modid = BnHA.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModSetup {
 
     public static void init(final FMLCommonSetupEvent event) {
@@ -31,6 +34,11 @@ public class ModSetup {
         QuirkRegistry.addQuirk(EraserQuirk.ID, () -> new EraserQuirk());
 
         Networking.registerMessages();
+    }
+
+    @SubscribeEvent
+    public static void serverLoad(FMLServerStartingEvent event) {
+        BnHACommands.register(event.getServer().getCommandManager().getDispatcher());
     }
 
 }
